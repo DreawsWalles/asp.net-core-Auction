@@ -1,0 +1,51 @@
+﻿@model project.Models.Person.PersonModel;
+<style>
+.item span{
+    display:block;
+    font-family: 'Century Gothic';
+}
+.item form{
+    font-family: 'Century Gothic';
+}
+</style>
+<div class="item">
+        <span>Имя</span>
+            <form id="Name" asp-action="EditName" asp-controller="User" method='post'>
+                <input type="text" asp-for="Name" value="@Model.Name" readonly />
+                <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('Name')">✎</button>
+                <span asp-validation-for="Name"></span>
+            </form>
+    </div>
+    <div class="item">
+        <span>Фамилия</span>
+            <form id="Sername" asp-action="EditSername" asp-controller="User" method='post'>
+                <input type="text" asp-for="Sername" value="@Model.Sername" readonly />
+                <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('Sername')">✎</button>
+                <span asp-validation-for="Sername"></span>
+            </form>
+    </div>
+    <div class="item">
+        <span>Отчество</span>
+            <form id="Patronymic" asp-action="EditPatronymic" asp-controller="User" method='post'>
+                <input type="text" asp-for="Patronymic" value="@Model.Patronymic" readonly />
+                <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('Patronymic')">✎</button>
+                <span asp-validation-for="Patronymic"></span>
+            </form>
+    </div>
+    <div class="item">
+        <span>Телефон</span>
+            <form id="Phone" asp-action="EditPhone" asp-controller="User" method='post'>
+                <input type="tel" asp-for="Phone" value="@Model.Phone" readonly />
+                <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('Phone')">✎</button>
+                <span asp-validation-for="Phone"></span>
+            </form>
+    </div>
+    <div class="item">
+        <span>Email</span>
+            <form id="Email" asp-action="EditEmail" asp-controller="User" method='post'>
+                <input type="email" asp-for="Email" value="@Model.Email" readonly />
+                <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('Email')">✎</button>
+                <span asp-validation-for="Email"></span>
+            </form>
+        </div>
+

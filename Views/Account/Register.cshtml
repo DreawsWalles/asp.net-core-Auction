@@ -1,0 +1,63 @@
+﻿@model project.Models.RegisterModel;
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_LayoutMainPageNotLog.cshtml";
+}
+
+<style>
+    .content{
+        height:90vh;
+    }
+</style>
+<div class="content">
+    <h1>Регистрация</h1>
+    <form method='post' asp-action="Register" asp-controller="Account" asp-anti-forgery="true">
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label asp-for="Name">Имя</label>
+          <input asp-for="Name" type="text" class="form-control" id="Sername" placeholder="Имя">
+          <span class="error" asp-validation-for="Name"></span>
+        </div>
+        <div class="form-group col-md-4">
+          <label asp-for="Sername">Фамилия</label>
+          <input asp-for="Sername" type="text" class="form-control" id="Sername" placeholder="Фамилия">
+          <span class="error" asp-validation-for="Sername"></span>
+        </div>
+        <div class="form-group col-md-4">
+          <label asp-for="Patronymic">Отчество</label>
+          <input asp-for="Patronymic" type="text" class="form-control" id="Patronymic" placeholder="Отчество">
+          <span class="error" asp-validation-for="Patronymic"></span>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label asp-for="Email">Email</label>
+          <input asp-for="Email" type="email" class="form-control" id="Email" placeholder="Email">
+          <span class="error" asp-validation-for="Email"></span>
+        </div>
+        <div class="form-group col-md-6">
+          <label asp-for="Phone">Телефон</label>
+          <input asp-for="Phone" type="tel" class="form-control" id="Phone" placeholder="">
+          <span class="error" asp-validation-for="Phone"></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label asp-for="Login">Логин</label>
+        <input asp-for="Login" type="text" class="form-control" id="Login" placeholder="Ваш логин...">
+        <span class="error" asp-validation-for="Login"></span>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label asp-for="Password">Пароль</label>
+          <input asp-for="Password" type="password" class="form-control" id="Password" placeholder="Ваш пароль">
+          <span class="error" asp-validation-for="Password"></span>
+        </div>
+        <div class="form-group col-md-6">
+          <label asp-for="ConfirmPassword">Подтверждение пароля</label>
+          <input asp-for="ConfirmPassword" type="password" class="form-control" id="Confirmpassword" placeholder="Подтверждение пароля">
+          <span class="error" asp-validation-for="ConfirmPassword"></span>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-outline-success">Зарегистрироваться</button>
+    </form>
+</div>

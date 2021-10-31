@@ -1,0 +1,49 @@
+﻿@model project.Models.Person.RecipientDetailsModel;
+@{
+    ViewData["Title"] = "AddDetails";
+    Layout = "~/Views/Shared/_LayoutMainPageLog.cshtml";
+}
+<style>
+    .header span{
+        font-family:'Century Gothic';
+        font-size: 28px;
+    }
+</style>
+<div class="header">
+    <span>Bank details</span>
+</div>
+<hr id="firstHr"/>
+   <form method='post' asp-action="AddDetails" asp-controller="RecipientDetails" asp-anti-forgery="true">
+      <div class="form-group">
+        <label asp-for="Name">Название банка</label>
+        <input asp-for="Name" type="text" class="form-control" placeholder="Название банка">
+        <span class="error" asp-validation-for="Name"></span>
+      </div>
+        <div class="form-group">
+          <label asp-for="INN">ИНН</label>
+          <input asp-for="INN" type="text" class="form-control" placeholder="ИНН">
+          <span class="error" asp-validation-for="INN"></span>
+        </div>
+        <div class="form-group">
+          <label asp-for="KPP">КПП</label>
+          <input asp-for="KPP" type="text" class="form-control" placeholder="КПП">
+          <span class="error" asp-validation-for="KPP"></span>
+        </div>
+        <div class="form-group">
+          <label asp-for="AccountNumber">Номер счета</label>
+          <input asp-for="AccountNumber" type="text" class="form-control" placeholder="Номер счета">
+          <span class="error" asp-validation-for="AccountNumber"></span>
+        </div>
+        <div class="form-group">
+          <label asp-for="BIK">БИК</label>
+          <input asp-for="BIK" type="text" class="form-control" placeholder="БИК">
+          <span class="error" asp-validation-for="BIK"></span>
+        </div>
+        <div class="form-group">
+          <label asp-for="CorrespondentAccount">Корреспондентский счет</label>
+          <input asp-for="CorrespondentAccount" type="text" class="form-control" placeholder="Корреспондентский счет">
+          <span class="error" asp-validation-for="CorrespondentAccount"></span>
+        </div>
+      <button type="submit" class="btn btn-outline-success">Добавить банковские реквизиты</button>
+    </form>
+

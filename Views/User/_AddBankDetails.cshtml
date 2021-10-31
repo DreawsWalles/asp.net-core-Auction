@@ -1,0 +1,57 @@
+﻿@model project.Models.Person.RecipientDetailsModel;
+
+<div class="Adress">
+            <span>Bank details</span>
+            <button id="btn-up-down-2" type="submit" class="btn edit btn-outline-secondary" onclick="upDown('Bank-content', 'btn-up-down-2')">▼</button>
+</div>
+ <div id="Bank-content">
+        <hr />
+            <div class="item">
+            <span>Название банка</span>
+                <form id="NameBank" asp-action="EditNameBank" asp-controller="User" method='post'>
+                    <input type="text" asp-for="Name" value="@Model.Name" readonly />
+                    <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('NameBank')">✎</button>
+                    <span asp-validation-for="Name"></span>
+                </form>
+            </div>
+            <div class="item">
+            <span>ИНН</span>
+                <form id="INN" asp-action="EditINN" asp-controller="User" method='post'>
+                    <input type="text" asp-for="INN" value="@Model.INN" readonly />
+                    <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('INN')">✎</button>
+                    <span asp-validation-for="INN"></span>
+                </form>
+            </div>
+            <div class="item">
+            <span>КПП</span>
+                <form id="KPP" asp-action="EditKPP" asp-controller="User" method='post'>
+                    <input type="text" asp-for="KPP" value="@Model.KPP" readonly />
+                    <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('KPP')">✎</button>
+                    <span asp-validation-for="KPP"></span>
+                </form>
+            </div>
+            <div class="item">
+            <span>Банковский счет</span>
+                <form id="AccountNumber" asp-action="EditAccountNumber" asp-controller="User" method='post'>
+                    <input type="text" asp-for="AccountNumber" value="@Model.AccountNumber" readonly />
+                    <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('AccountNumber')">✎</button>
+                    <span asp-validation-for="AccountNumber"></span>
+                </form>
+            </div>
+            <div class="item">
+            <span>БИК</span>
+                <form id="BIK" asp-action="EditBIK" asp-controller="User" method='post'>
+                    <input type="text" asp-for="BIK" value="@Model.BIK" readonly />
+                    <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('BIK')">✎</button>
+                    <span asp-validation-for="BIK"></span>
+                </form>
+            </div>
+            <div class="item">
+            <span>Корреспондентский счет</span>
+                <form id="CorrespondentAccount" asp-action="EditCorrespondentAccount" asp-controller="User" method='post'>
+                    <input type="text" asp-for="CorrespondentAccount" value="@Model.CorrespondentAccount" readonly />
+                    <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('CorrespondentAccount')">✎</button>
+                    <span asp-validation-for="CorrespondentAccount"></span>
+                </form>
+            </div>
+</div>

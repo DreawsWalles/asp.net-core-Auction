@@ -1,0 +1,62 @@
+﻿@model project.Models.Adress.AdressModel;
+<style>
+    .unVis{
+        display:none;
+    }
+</style>
+            <div class="Adress">
+                <span>Adress</span>
+                 <button id="btn-up-down-1" type="submit" class="btn edit btn-outline-secondary" onclick="upDown('Adress-content', 'btn-up-down-1')">▼</button>
+            </div>
+ <div id="Adress-content">
+                 <hr />
+            <div class="item">
+            <span>Страна</span>
+                <form id="Country" asp-action="EditCountry" asp-controller="User" method='post'>
+                    <input type="text" asp-for="Country" value="@Model.Country" readonly />
+                    <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('Country')">✎</button>
+                    <span asp-validation-for="Country"></span>
+                </form>
+            </div>
+            <div class="item">
+            <span>Город</span>
+                <form id="City" asp-action="EditCity" asp-controller="User" method='post'>
+                    <input type="text" asp-for="City" value="@Model.City" readonly />
+                    <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('City')">✎</button>
+                    <span asp-validation-for="City"></span>
+                </form>
+            </div>
+            <div class="item">
+            <span>Улица</span>
+                <form id="Street" asp-action="EditStreet" asp-controller="User" method='post'>
+                    <input type="text" asp-for="Street" value="@Model.Street" readonly />
+                    <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('Street')">✎</button>
+                    <span asp-validation-for="Street"></span>
+                </form>
+            </div>
+            <div class="item">
+            <span>Почтовый индекс</span>
+                <form id="PostIndex" asp-action="EditPostIndex" asp-controller="User" method='post'>
+                    <input type="text" asp-for="PostIndex" value="@Model.PostIndex" readonly />
+                    <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('PostIndex')">✎</button>
+                    <span asp-validation-for="PostIndex"></span>
+                </form>
+            </div>
+</div>
+<script>
+    function upDown(id, btnId){
+        debugger
+        let btn = document.getElementById(btnId);
+        let el = document.getElementById(id);
+        if(btn.innerHTML == "▼")
+        {
+            el.classList.add("unVis");
+            btn.innerHTML = "▲"
+        }
+        else
+        {
+            el.classList.remove("unVis");
+            btn.innerHTML = "▼"
+        }
+    }
+</script>

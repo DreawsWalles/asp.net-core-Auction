@@ -1,0 +1,50 @@
+﻿@model project.Models.Person.SenderDetailsModel;
+
+<div class="Adress">
+                <span>Credit details</span>
+                 <button id="btn-up-down-3" type="submit" class="btn edit btn-outline-secondary" onclick="upDown('Credit-content', 'btn-up-down-3')">▼</button>
+            </div>
+ <div id="Credit-content">
+                 <hr />
+            <div class="item">
+            <span>Имя</span>
+                <form id="NameCredit" asp-action="EditNameCredit" asp-controller="User" method='post'>
+                    <input type="text" asp-for="Name" value="@Model.Name" readonly />
+                    <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('NameCredit')">✎</button>
+                    <span asp-validation-for="Name"></span>
+                </form>
+            </div>
+            <div class="item">
+            <span>Фамилия</span>
+                <form id="SernameCredit" asp-action="EditSernameCredit" asp-controller="User" method='post'>
+                    <input type="text" asp-for="Sername" value="@Model.Sername" readonly />
+                    <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('SernameCredit')">✎</button>
+                    <span asp-validation-for="Sername"></span>
+                </form>
+            </div>
+            <div class="item">
+            <span>Номер карты</span>
+                <form id="NumberCart" asp-action="EditNumberCart" asp-controller="User" method='post'>
+                    <input type="text" asp-for="NumberCart" value="@Model.NumberCart" readonly />
+                    <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('NumberCart')">✎</button>
+                    <span asp-validation-for="NumberCart"></span>
+                </form>
+            </div>
+            <div class="item">
+            <span>CVC</span>
+                <form id="CVC" asp-action="EditCVC" asp-controller="User" method='post'>
+                    <input type="text" asp-for="CVC" value="@Model.CVC" readonly />
+                    <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('CVC')">✎</button>
+                    <span asp-validation-for="CVC"></span>
+                </form>
+            </div>
+            <div class="item">
+            <span>Срок действия:</span>
+                <form id="dateTime" asp-action="EditDatetime" asp-controller="User" method='post'>
+                    <input type="datetime" asp-for="dateTime" value="@Model.dateTime.Day.@Model.dateTime.Month.@Model.dateTime.Year" readonly />
+                    <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('dateTime')">✎</button>
+                    <span asp-validation-for="dateTime"></span>
+                </form>
+            </div>
+</div>
+

@@ -1,0 +1,202 @@
+﻿@model project.Models.UserModel;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutMainPageLog.cshtml";
+}
+<style>
+    .header{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    }
+    .header span{
+        font-family:'Century Gothic';
+        display:block;
+    }
+    .spanOne{
+        font-size: 28px;
+        font-family:Broadway;
+        font-weight:400;
+    }
+    #firstHr{
+        margin-top:-0.1em;
+    }
+    .item{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:1em;
+    }
+
+    .content{
+        margin:0 auto;
+        width:75%;
+    }
+    input{
+        border: 0 solid black;
+    }
+    .input-vis{
+        border: 1px solid black;
+    }
+    .form{
+        display:flex;
+        right:0;
+    }
+    .btn{
+        border: 0 solid black;  
+    }
+    .Adress{
+        display:flex;
+        justify-content:space-between;
+        margin-bottom: 1em;
+        margin-top:4em;
+        align-items:center;
+    }
+    .Adress span{
+        display:block;
+        font-family:'Century Gothic';
+        font-size:28px;
+    }
+    .Adress a{
+        color:black;
+        font-family:'Century Gothic';
+    }
+    .Adress a:hover{
+        color:purple;
+    }
+    .menu{
+        display:inline-block;
+        position:fixed;
+        left:13em;
+    }
+    .menu a{
+        background-color:white;
+        color:black;
+        display:block;
+        font-size:20px;
+        padding-left:0.9em;
+        padding-right:0.9em;
+        font-family: 'Century Gothic';
+    }
+    .menu a:hover{
+        background: rgba(236, 217, 251, 0.89);
+        margin-left:0.5em;
+    }
+</style>
+<div class="menu">
+    <a href="#Account">Данныые пользователя</a>
+    <a href="#Adress">Адрес</a>
+    <a href="#BankDetails">Банковские реквизиты</a>
+    <a href="#CreditDetails">Банковская карта</a>
+</div>
+<div class="content">
+    <a name="Account"></a> 
+    <div class="header">
+        <span class="spanOne">Account</span>
+        <span class="spanTwo">@Model.Login</span>
+    </div>
+<hr id="firstHr"/>
+    <div class="item">
+        <span>Логин</span>
+            <form id="login" asp-action="EditLogin" asp-controller="User" method='post'>
+                <input type="text" asp-for="Login" value="@Model.Login" readonly />
+                <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('login')">✎</button>
+                <span asp-validation-for="Login"></span>
+            </form>
+    </div>
+    <div class="item">
+        <span>Пароль</span>
+            <form id="password" asp-action="EditPassword" asp-controller="User" method='post'>
+                <input type="password" asp-for="Password" value="@Model.Password" readonly />
+                <button type="button" class="btn edit btn-outline-secondary" onclick="editNode('password')">✎</button>
+                <span asp-validation-for="Password"></span>
+            </form>
+    </div>
+    @{await Html.RenderPartialAsync("_EditPerson", new project.Models.Person.PersonModel(){Name = Model.PersonModel.Name, Sername = Model.PersonModel.Sername, Patronymic = Model.PersonModel.Patronymic,
+                                                                            Phone = Model.PersonModel.Phone, Email = Model.PersonModel.Email});} 
+    <hr />
+<a name="Adress"></a>
+    @{
+        if (Model.PersonModel.AdressModelID == null)
+        {
+            <div class="Adress">
+            <span>Adress</span>
+            <a asp-action="AddAdress" asp-controller="Adress">Добавить</a>  
+            </div>
+        }
+        else
+        {
+            await Html.RenderPartialAsync("_AddAdress", new project.Models.Adress.AdressModel(){Country = Model.PersonModel.Adress.Country, City = Model.PersonModel.Adress.City, Street = Model.PersonModel.Adress.Street, PostIndex = Model.PersonModel.Adress.PostIndex});
+        }
+    }
+            <hr />
+<a name="BankDetails"></a>
+    @{
+        if (Model.PersonModel.RecipientDetailsModelId == null)
+        {
+            <div class="Adress">
+                <span>Bank details</span>
+                <a asp-action="AddDetails" asp-controller="RecipientDetails">Добавить</a>  
+            </div>
+        }
+        else
+        {
+            await Html.RenderPartialAsync("_AddBankDetails", new project.Models.Person.RecipientDetailsModel()
+                {
+                    Name = Model.PersonModel.RecipientDetailsModels.Name,
+                    INN = Model.PersonModel.RecipientDetailsModels.INN,
+                    KPP = Model.PersonModel.RecipientDetailsModels.KPP,
+                    AccountNumber = Model.PersonModel.RecipientDetailsModels.AccountNumber,
+                    BIK = Model.PersonModel.RecipientDetailsModels.BIK,
+                    CorrespondentAccount = Model.PersonModel.RecipientDetailsModels.CorrespondentAccount
+                });
+        }
+    }
+
+            <hr />
+<a name="CreditDetails"></a>
+    @{
+        if(Model.PersonModel.SenderDetailsModelId == null)
+        {
+            <div class="Adress">
+                <span>Credit details</span>
+                <a asp-action="AddDetails" asp-controller="SenderDetails">Добавить</a>
+            </div>
+        }
+        else
+        {
+            await Html.RenderPartialAsync("_AddCreditDetails", new project.Models.Person.SenderDetailsModel()
+            {
+                Name = Model.PersonModel.SenderDetails.Name,
+                Sername = Model.PersonModel.SenderDetails.Sername,
+                NumberCart = Model.PersonModel.SenderDetails.NumberCart,
+                CVC = Model.PersonModel.SenderDetails.CVC,
+                dateTime = Model.PersonModel.SenderDetails.dateTime
+            }
+            );
+        }
+    }
+        <hr />
+</div>
+<script>
+    function editNode(name){
+        debugger
+        let element = document.getElementById(name);
+        if(element.childNodes[3].innerHTML == "✎")
+        {
+            element.childNodes[3].attributes[0].nodeValue = "button";
+            element.childNodes[3].innerHTML = "✓"
+            element.childNodes[1].removeAttribute("readonly");
+            element.childNodes[1].classList.add("input-vis");
+            return;
+        }
+        if(element.childNodes[3].innerHTML == "✓")
+        {
+            element.childNodes[3].attributes[0].nodeValue = "submit";
+            element.childNodes[3].innerHTML = "✎"
+            element.childNodes[1].addAttribute("readonly");
+            element.childNodes[1].classList.remove("input-vis");
+            return;
+        }
+    }
+</script>

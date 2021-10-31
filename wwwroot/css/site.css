@@ -1,0 +1,140 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+header {
+    background-color: black;
+    display: flex;
+    justify-content:space-around;
+    align-items:center;
+    position:fixed;
+    min-width:100%;
+    top:0;
+    z-index:1000000;
+}
+.container{
+    margin-top:5em;
+}
+a {
+    color: white;
+}
+    a:hover {
+        color: #7C45C5;
+        text-decoration: none;
+    }
+.Menu {
+    margin-left:-10em;
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    min-width:25%;
+}
+.Logo {
+    font-size: 24px;
+    letter-spacing: 0.1em;
+}
+.Logo1{
+    color:white;
+    font-family:'Century Gothic';
+    font-style: normal;
+    font-weight: normal;
+    line-height:29px;
+    letter-spacing: 0.1em;
+}
+.Logo2{
+    font-family:Broadway;
+    font-weight:400;
+    margin-left:-0.1em;
+    color:#7C45C5;
+}
+.dropbtn {
+    color: white;
+    padding: 16px;
+    border: none;
+    background-color: black;
+    font-family: 'Times New Roman';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 22px;
+    line-height: 25px;
+    letter-spacing: 0.1em;
+}
+.dropdown 
+{
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content 
+{
+    display: none;
+    position: absolute;
+    min-width: 168px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+    .dropdown-content a 
+    {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        background: rgba(236, 217, 251, 0.89);
+        color: #696172;
+        font-family: 'Century Gothic';
+        font-size: 22px;
+    }
+
+.dropdown-content a:hover {
+    background: rgba(236, 255, 251, 0.89);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    color: #7C45C5;
+}
+
+.point-2{
+    font-family: 'Times New Roman';
+    font-size: 22px;
+    line-height: 25px;
+    letter-spacing: 0.1em;
+    color: white;
+}
+    .point-2:hover {
+        color: #7C45C5;
+    }
+.point-3:hover {
+    color: #7C45C5;
+}
+.point-3 {
+    font-family: 'Times New Roman';
+    font-size: 22px;
+    line-height: 25px;
+    letter-spacing: 0.1em;
+    color: white;
+    margin-left: 0.7em;
+}
+.Account {
+    color: white;
+    font-family: 'Century Gothic';
+}
+.Account1{
+    margin-right:1em;
+}
+
+.acc {
+    position: absolute;
+    min-width: 216px;
+    margin-left:-10.5em;
+}
+
+.error {
+    color: red;
+}
+.container{
+    height:100vh;
+}

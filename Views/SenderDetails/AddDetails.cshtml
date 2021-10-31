@@ -1,0 +1,48 @@
+﻿@model project.Models.Person.SenderDetailsModel;
+@{
+    ViewData["Title"] = "AddDetails";
+    Layout = "~/Views/Shared/_LayoutMainPageLog.cshtml";
+}
+<style>
+    .header span{
+        font-family:'Century Gothic';
+        font-size: 28px;
+    }
+</style>
+<div class="header">
+    <span>Bank details</span>
+</div>
+<hr id="firstHr"/>
+   <form method='post' asp-action="AddDetails" asp-controller="SenderDetails" asp-anti-forgery="true">
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label asp-for="Name">Имя</label>
+        <input asp-for="Name" type="text" class="form-control" placeholder="Имя">
+        <span class="error" asp-validation-for="Name"></span>
+      </div>
+        <div class="form-group col-md-6">
+          <label asp-for="Sername">Фамилия</label>
+          <input asp-for="Sername" type="text" class="form-control" placeholder="Фамилия">
+          <span class="error" asp-validation-for="Sername"></span>
+        </div>
+    </div>
+        <div class="form-group">
+          <label asp-for="NumberCart">Номер карты</label>
+          <input asp-for="NumberCart" type="text" class="form-control" placeholder="Номер карты">
+          <span class="error" asp-validation-for="NumberCart"></span>
+        </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+          <label asp-for="dateTime">Срок действия</label>
+          <input asp-for="dateTime" type="datetime" class="form-control" placeholder="Срок дейтсвия">
+          <span class="error" asp-validation-for="dateTime"></span>
+        </div>
+        <div class="form-group col-md-6">
+          <label asp-for="CVC">CVC</label>
+          <input asp-for="CVC" type="text" class="form-control" placeholder="CVC">
+          <span class="error" asp-validation-for="CVC"></span>
+        </div>
+    </div>
+      <button type="submit" class="btn btn-outline-success">Добавить карту</button>
+    </form>
+

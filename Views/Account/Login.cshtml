@@ -1,0 +1,36 @@
+﻿@model project.Models.LoginModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_LayoutMainPageNotLog.cshtml";
+}
+<style>
+    .Login{
+        width:50vw;
+        height:90vh;
+    }
+    .button{
+        display:flex;
+        justify-content:space-between;
+    }
+</style>
+<h1>Авторизаия</h1>
+<div class="Login">
+        <form method="post" asp-action="Login" asp-controller="Account">
+            <div class="form-group">
+                <label asp-for="Login">Логин</label>
+                <input asp-for="Login" type="text" class="form-control" id="Login" placeholder="Ваш логин...">
+                <span class="error" asp-validation-for="Login"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password">Пароль</label>
+                <input asp-for="Password" type="password" class="form-control" id="Password" placeholder="Ваш пароль..." />
+                <span class="error" asp-validation-for="Password"></span>
+            </div>
+            <div class="button">
+                <button type="submit" class="btn btn-outline-success">Войти</button>
+                <button formmethod='get' type="submit" class="btn btn-outline-secondary" asp-action="Register">Регистрация</button>
+            </div>
+        </form>
+    </div>
+
+

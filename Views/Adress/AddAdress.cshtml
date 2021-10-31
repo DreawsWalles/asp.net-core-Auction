@@ -1,0 +1,39 @@
+﻿@model project.Models.Adress.AdressModel
+@{
+    ViewData["Title"] = "AddAdress";
+    Layout = "~/Views/Shared/_LayoutMainPageLog.cshtml";
+}
+<style>
+    .header span{
+        font-family:'Century Gothic';
+        font-size: 28px;
+    }
+</style>
+<div class="header">
+    <span>Adress</span>
+</div>
+<hr id="firstHr"/>
+   <form method='post' asp-action="AddAdress" asp-controller="Adress" asp-anti-forgery="true">
+      <div class="form-group">
+        <label asp-for="Country">Страна</label>
+        <input asp-for="Country" type="text" class="form-control" placeholder="Страна">
+        <span class="error" asp-validation-for="Country"></span>
+      </div>
+        <div class="form-group">
+          <label asp-for="City">Город</label>
+          <input asp-for="City" type="text" class="form-control" placeholder="Город">
+          <span class="error" asp-validation-for="City"></span>
+        </div>
+        <div class="form-group">
+          <label asp-for="Street">Улица</label>
+          <input asp-for="Street" type="text" class="form-control" placeholder="Улица">
+          <span class="error" asp-validation-for="Street"></span>
+        </div>
+        <div class="form-group">
+          <label asp-for="PostIndex">Почтовый индекс</label>
+          <input asp-for="PostIndex" type="text" class="form-control" placeholder="Почтовый индекс">
+          <span class="error" asp-validation-for="PostIndex"></span>
+        </div>
+      <button type="submit" class="btn btn-outline-success">Добавить адрес</button>
+    </form>
+
