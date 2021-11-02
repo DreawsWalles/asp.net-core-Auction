@@ -7,12 +7,12 @@ namespace project.Models
     public class ProductAuctionModel
     {
         public int Id { get; set; }
-        public int AuctionModelId { get; set; }
+        public int? AuctionModelId { get; set; }
         [ForeignKey("UserModelBuyer")]
-        public int UserModelBuyerId { get; set; }
+        public int? UserModelBuyerId { get; set; }
         [ForeignKey("UserModelSeller")]
-        public int PersonModelSellerId { get; set; }
-        public int ProductModelId { get; set; }
+        public int? PersonModelSellerId { get; set; }
+        public int? ProductModelId { get; set; }
         public int Number { get; set; }
         public int StartPrice { get; set; }
         public int EndPrice { get; set; }

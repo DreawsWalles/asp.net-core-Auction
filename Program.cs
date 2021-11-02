@@ -22,7 +22,7 @@ namespace project
 
                 try
                 {
-                    var context = services.GetRequiredService<AuctionContext>();
+                    var contextOne = services.GetRequiredService<AuctionContext>();
                 }
                 catch (Exception ex)
                 {

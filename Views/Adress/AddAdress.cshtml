@@ -8,7 +8,25 @@
         font-family:'Century Gothic';
         font-size: 28px;
     }
+    .back a{
+        color:black;
+        background-color:#7C45C5;
+        position:fixed;
+        left:0;
+        top:40vh;
+        font-size:35px;
+        padding-left:0.2em;
+        padding-right:0.2em;
+        padding-top:0.4em;
+        padding-bottom:0.4em;
+    }
+    .back a:hover{
+        color:white;
+    }
 </style>
+<div class="back">
+    <a asp-action="Back" asp-controller="User">⮜</a>
+</div>
 <div class="header">
     <span>Adress</span>
 </div>

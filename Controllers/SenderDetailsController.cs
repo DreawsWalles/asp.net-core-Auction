@@ -1,16 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using project.DAL;
 using project.Models.Person;
+using project.Services.Interfaces;
 using System.Linq;
 
 namespace project.Controllers
 {
     public class SenderDetailsController : Controller
     {
-        AuctionContext DataBase;
-        public SenderDetailsController(AuctionContext context)
+        readonly AuctionContext DataBase;
+        readonly IUserAction userService;
+        readonly IPersonAction personService;
+        public SenderDetailsController(AuctionContext context, IUserAction userService, IPersonAction personService)
         {
             DataBase = context;
+            this.userService = userService;
+            this.personService = personService;
         }
         [HttpGet]
         public IActionResult AddDetails()
@@ -24,9 +29,7 @@ namespace project.Controllers
         {
             if (ModelState.IsValid)
             {
-                PersonModel person = DataBase.Persons.FirstOrDefault(u => u.Id == DataBase.Users.FirstOrDefault(i => i.Login == User.Identity.Name).PersonModelId);
-                person.SenderDetails = model;
-                DataBase.SaveChanges();
+                personService.Edit(DataBase, userService, User.Identity.Name, new PersonModel() { SenderDetails = model}, "SenderDetails");
                 return RedirectToAction("Index", "User");
             }
             return View();

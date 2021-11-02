@@ -5,8 +5,13 @@
     }
 </style>
             <div class="Adress">
-                <span>Adress</span>
-                 <button id="btn-up-down-1" type="submit" class="btn edit btn-outline-secondary" onclick="upDown('Adress-content', 'btn-up-down-1')">▼</button>
+                <span>Address</span>
+                 <div style="display:flex">
+                    <button id="btn-up-down-1" type="submit" class="btn edit btn-outline-secondary" onclick="upDown('Adress-content', 'btn-up-down-1')">▼</button>
+                    <form asp-action="RemoveAdress" asp-controller="User">
+                        <button type="submit" class="btn edit btn-outline-secondary">✖</button>
+                    </form>
+                </div>
             </div>
  <div id="Adress-content">
                  <hr />

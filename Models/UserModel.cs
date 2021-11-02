@@ -15,7 +15,7 @@ namespace project.Models
         [Required(ErrorMessage = "Не указан пароль")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        public int PersonModelId { get; set; }
+        public int? PersonModelId { get; set; }
 
         public virtual PersonModel PersonModel { get; set; }
         public virtual ICollection<ProductModel> Products { get; set; }

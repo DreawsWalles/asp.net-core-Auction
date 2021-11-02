@@ -1,0 +1,66 @@
+﻿@model ICollection<project.Models.Product.ProductModel>;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutMainPageLog.cshtml";
+}
+<style>
+    .header{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        width:85%;
+        margin:0 auto;
+    }
+    .content{
+    }
+    .header span{
+        font-family:'Century Gothic';
+        font-size:28px;
+        margin-top:0.4em;
+    }
+    .content hr{
+        width:85%;
+        margin-top:0em;
+    }
+    .main-content{
+        display:flex;
+        justify-content:center;
+        font-family:'Century Gothic';
+        font-size:22px;
+    }
+</style>
+<div class="content">
+    <div class="header">
+        <span>Лоты</span>
+        <form method="get" asp-action="AddLot" asp-controller="Lot">
+            <button type="submit" class="btn edit btn-outline-secondary">Добавить</button>
+        </form>
+    </div>
+    <hr />
+    <div class="main-content">
+        @{
+            if(Model.Count() == 0)
+            {
+                <span class="span-center">Вы ещё не добавили ни одного лота</span>
+            }
+            else
+            {
+                foreach(project.Models.Product.ProductModel element in Model)
+                {
+                    <div class= "item">
+                        <a>✖</a>
+                        <div class="image">
+                            <img id="img" src="@element.Path" class="img-fluid">
+                        </div>
+                        <span>@element.Name</span>
+                        <form asp-action="RemoveAdress" asp-controller="User">
+                            <button type="submit" class="btn edit btn-outline-secondary">Посмотреть</button>
+                        </form>
+                    </div>
+                }
+
+            }
+        }
+    </div>
+</div>
+

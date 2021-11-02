@@ -8,9 +8,9 @@ namespace project.Models
     public class AuctionModel
     {
         public int Id {  get; set; }
-        public int TypeProductModelId { get; set; }
-        public int UserModelId { get; set; }
-        public int AdressModelId { get; set; }
+        public int? TypeProductModelId { get; set; }
+        public int? UserModelId { get; set; }
+        public int? AdressModelId { get; set; }
         public DateTime dateTime { get; set; }
         
         public virtual TypeProductModel TypeProductModel { get; set; }

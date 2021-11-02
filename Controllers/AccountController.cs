@@ -9,15 +9,18 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using project.Models.Person;
 using System;
+using project.Services.Interfaces;
 
 namespace project.Controllers
 {
     public class AccountController : Controller
     {
         AuctionContext DataBase;
-        public AccountController(AuctionContext DataBase)
+        IUserAction userService;
+        public AccountController(AuctionContext DataBase, IUserAction userService)
         {
             this.DataBase = DataBase;
+            this.userService = userService;
         }
         [HttpGet]
         public IActionResult Login()
@@ -42,8 +45,7 @@ namespace project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
-            string tmp = Convert.ToString(Hash(model.Password));
-            UserModel user = DataBase.Users.FirstOrDefault(u => u.Login == model.Login && u.Password == tmp);
+            UserModel user = userService.Get(DataBase, model);
             if (user != null)
             {
                 await Authenticate(model.Login);
@@ -76,14 +78,10 @@ namespace project.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserModel user = DataBase.Users.FirstOrDefault(u => u.Login == model.Login);
+                UserModel user = userService.Get(DataBase, model.Login);
                 if (user == null)
                 {
-                    DataBase.Users.Add(new UserModel() {Login = model.Login, Password = Convert.ToString(Hash(model.Password)), 
-                                        PersonModel = new PersonModel() { Name = model.Name, Sername = model.Sername, Patronymic = model.Patronymic, 
-                                        Email = model.Email, Phone = model.Phone, Adress = null, RecipientDetailsModels = null,SenderDetails = null,
-                                        AdressModelID = null, RecipientDetailsModelId = null, SenderDetailsModelId = null }});
-                    DataBase.SaveChanges();
+                    userService.Add(DataBase, model);
                     await Authenticate(model.Login);
                     return RedirectToAction("Index", "User");
                 }

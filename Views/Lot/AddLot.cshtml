@@ -1,0 +1,138 @@
+﻿@model project.Models.LotModel;
+@{
+    ViewData["Title"] = "AddLot";
+    Layout = "~/Views/Shared/_LayoutMainPageLog.cshtml";
+}
+<style>
+    .content{
+    justify-content:space-between;
+    } 
+    .image{
+        margin-right:1em;
+    }
+    .btn-success{
+        margin-top:1em;
+    }
+    #img{
+        width:20vw;
+    }
+    .header span{
+        font-family:'Century Gothic';
+        font-size:28px;
+        margin-top:0.4em;
+    }
+    hr{
+        margin-top:0em;
+        margin-bottom:2em;
+    }
+        .back a{
+        color:black;
+        background-color:#7C45C5;
+        position:fixed;
+        left:0;
+        top:40vh;
+        font-size:35px;
+        padding-left:0.2em;
+        padding-right:0.2em;
+        padding-top:0.4em;
+        padding-bottom:0.4em;
+    }
+    .back a:hover{
+        color:white;
+    }
+</style>
+
+<div class="back">
+    <a asp-action="Index" asp-controller="Lot">⮜</a>
+</div>
+
+<div class="header">
+    <span>Лоты</span>
+</div>
+    <hr />
+<div class="content form-row">
+        <div class="image form-group col-md-5">
+        @{
+            if (Model.Path == null)
+            {
+                <img id="img" src="~/image/car.svg" class="img-fluid">
+            }
+            else
+            {
+                <img id="img" src="@Model.Path" class="img-fluid">
+            }
+        }        
+        </div>
+        <div class="form-group col-md-6">
+            <form id="mainForm" asp-action="AddLot" asp-controller="Lot" method="post">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">Название лота</span>
+              </div>
+              <input asp-for="Name" required type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Название лота">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Категория</label>
+              </div>
+              <select id="select" required asp-for="type" class="custom-select" onchange="changeImage()">
+                <option selected value=''>Выбрать...</option>
+                <option value="1">Авто</option>
+                <option value="2">Еда</option>
+                <option value="3">Одежда</option>
+                <option value="4">Недвижимость</option>
+                <option value="5">Искусство</option>
+                <option value="6">Чай</option>
+              </select>
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">Комментраии</span>
+              </div>
+              <input required asp-for="Comments" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Комментарии">
+            </div>
+            </form>
+            <form id="imageForm" asp-action="AddFile" asp-controller="Lot" method="post" enctype="multipart/form-data">
+                <div class="input-group mb-6">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-outline-secondary" type="submit">Загрузить</button>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" name="uploadedFile" class="custom-file-input" id="inputGroupFile03">
+                        <label class="custom-file-label" for="inputGroupFile03">Выбрать изображение</label>
+                    </div>
+                </div>
+            </form>
+            <div class="input-group mb-3">
+                <button form="mainForm" class="btn btn-success" type="submit">Добавить</button>
+            </div>
+        </div>
+      </div>
+
+<script>
+    function changeImage(){
+        debugger
+        let element = document.getElementById("img");
+        switch(document.getElementById("select").options.selectedIndex)
+        {
+            case 1:
+                element.attributes[1].nodeValue = "/image/car.svg";
+                break;
+            case 2:
+                element.attributes[1].nodeValue = "/image/food.svg";
+                break;
+            case 3:
+                element.attributes[1].nodeValue = "/image/jacket.svg";
+                break;
+            case 4:
+                element.attributes[1].nodeValue = "/image/nedvizh.svg";
+                break;
+            case 5:
+                element.attributes[1].nodeValue = "/image/culture.svg";
+                break;
+            case 6:
+                element.attributes[1].nodeValue = "/image/tea.svg";
+                break;
+        }
+    }
+</script>

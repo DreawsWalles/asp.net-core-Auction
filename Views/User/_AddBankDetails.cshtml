@@ -2,7 +2,12 @@
 
 <div class="Adress">
             <span>Bank details</span>
-            <button id="btn-up-down-2" type="submit" class="btn edit btn-outline-secondary" onclick="upDown('Bank-content', 'btn-up-down-2')">▼</button>
+            <div style="display:flex">
+                <button id="btn-up-down-2" type="submit" class="btn edit btn-outline-secondary" onclick="upDown('Bank-content', 'btn-up-down-2')">▼</button>
+                <form asp-action="RemoveBankDetails" asp-controller="User">
+                    <button type="submit" class="btn edit btn-outline-secondary">✖</button>
+                </form>
+            </div>
 </div>
  <div id="Bank-content">
         <hr />

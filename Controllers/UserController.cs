@@ -13,38 +13,46 @@ using Microsoft.AspNetCore.Authorization;
 using project.Models.Person;
 using project.Models.Adress;
 using System;
-using project.Models.Person;
+using project.Services.Interfaces;
+using project.Models.Product;
 
 namespace project.Controllers
 {
     public class UserController : Controller
     {
-        AuctionContext DataBase;
-        UserModel user;
-        public UserController(AuctionContext context)
+        readonly AuctionContext DataBase;
+        readonly IUserAction userService;
+        readonly IPersonAction personService;
+        readonly IUserAdressAction adressService;
+        readonly IRecipientDetailsAction bankDetailsService;
+        readonly ISenderDetailsAction creditDetalisService;
+        public UserController(AuctionContext context, IUserAction userService, IPersonAction personService, IUserAdressAction adressService, IRecipientDetailsAction bankDetailsService, ISenderDetailsAction creditDetalisService)
         {
             DataBase = context;
+            this.userService = userService;
+            this.personService = personService;
+            this.adressService = adressService;
+            this.bankDetailsService = bankDetailsService;
+            this.creditDetalisService = creditDetalisService;
         }
         [Authorize]
         public IActionResult Index()
         {
-            user = DataBase.Users.FirstOrDefault(u => u.Login == User.Identity.Name);
-            user.PersonModel = DataBase.Persons.FirstOrDefault(u => u.Id == user.PersonModelId);
-            user.PersonModel.Adress = DataBase.Adresses.FirstOrDefault(u => u.Id == user.PersonModel.AdressModelID);
-            user.PersonModel.RecipientDetailsModels = DataBase.RecipientDetails.FirstOrDefault(x => x.Id == user.PersonModel.RecipientDetailsModelId);
-            user.PersonModel.SenderDetails = DataBase.SenderDetails.FirstOrDefault(x => x.Id == user.PersonModel.SenderDetailsModelId);
+            UserModel user = userService.Get(DataBase, User.Identity.Name);
+            user.PersonModel = personService.Get(DataBase, userService, User.Identity.Name);
+            user.PersonModel.Adress = adressService.Get(DataBase, personService, userService, User.Identity.Name);
+            user.PersonModel.RecipientDetailsModels = bankDetailsService.Get(DataBase, personService, userService, User.Identity.Name);
+            user.PersonModel.SenderDetails = creditDetalisService.Get(DataBase, personService, userService, User.Identity.Name) ;
             return View(user);
         }
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditLogin(string Login)
         {
-            string name = User.Identity.Name;
-            UserModel tmp = DataBase.Users.FirstOrDefault(u => u.Login == Login);
-            if ((tmp == null || tmp.Login == name) && !string.IsNullOrEmpty(Login))
+            UserModel tmp = userService.Get(DataBase, User.Identity.Name);
+            if ((tmp == null || tmp.Login == User.Identity.Name) && !string.IsNullOrEmpty(Login))
             {
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                tmp.Login = Login;
-                DataBase.SaveChanges();
+                userService.Edit(DataBase, User.Identity.Name, new UserModel() { Login = Login }, "Login");
                 await Authenticate(Login);
             }
             return RedirectToAction("Index");
@@ -84,189 +92,153 @@ namespace project.Controllers
         {
             return RedirectToAction("Index", "Home");
         }
+
+
         public IActionResult EditPassword(string password)
         {
             if (!string.IsNullOrEmpty(password))
-            {
-                UserModel tmp = DataBase.Users.FirstOrDefault(x => x.Login == User.Identity.Name);
-                tmp.Password = password;
-                DataBase.SaveChanges();
-            }
+                userService.Edit(DataBase, User.Identity.Name, new UserModel() { Password = password }, "Password");
             return RedirectToAction("Index");
         }
         public IActionResult EditName(string name)
         {
             if (!string.IsNullOrEmpty(name))
-            {
-                PersonModel tmp = DataBase.Persons.FirstOrDefault(x => x.Id == DataBase.Users.FirstOrDefault(y => y.Login == User.Identity.Name).PersonModelId);
-                tmp.Name = name;
-                DataBase.SaveChanges();
-            }
+                personService.Edit(DataBase, userService, User.Identity.Name, new PersonModel() { Name = name}, "Name");
             return RedirectToAction("Index");
         }
         public IActionResult EditSername(string name)
         {
             if (!string.IsNullOrEmpty(name))
-            {
-                PersonModel tmp = DataBase.Persons.FirstOrDefault(x => x.Id == DataBase.Users.FirstOrDefault(y => y.Login == User.Identity.Name).PersonModelId);
-                tmp.Sername = name;
-                DataBase.SaveChanges();
-            }
+                personService.Edit(DataBase, userService, User.Identity.Name, new PersonModel() { Sername = name}, "Sername");
             return RedirectToAction("Index");
         }
         public IActionResult EditPatronymic(string field)
         {
             if (!string.IsNullOrEmpty(field))
-            {
-                PersonModel tmp = DataBase.Persons.FirstOrDefault(x => x.Id == DataBase.Users.FirstOrDefault(y => y.Login == User.Identity.Name).PersonModelId);
-                tmp.Patronymic = field;
-                DataBase.SaveChanges();
-            }
+                personService.Edit(DataBase, userService, User.Identity.Name, new PersonModel() { Patronymic = field}, "Patronymic");
             return RedirectToAction("Index");
         }
         public IActionResult EditPhone(string field)
         {
             if (!string.IsNullOrEmpty(field))
-            {
-                PersonModel tmp = DataBase.Persons.FirstOrDefault(x => x.Id == DataBase.Users.FirstOrDefault(y => y.Login == User.Identity.Name).PersonModelId);
-                tmp.Phone = field;
-                DataBase.SaveChanges();
-            }
+                personService.Edit(DataBase, userService, User.Identity.Name, new PersonModel() { Phone = field}, "Phone");
             return RedirectToAction("Index");
         }
         public IActionResult EditEmail(string field)
         {
             if (!string.IsNullOrEmpty(field))
-            {
-                PersonModel tmp = DataBase.Persons.FirstOrDefault(x => x.Id == DataBase.Users.FirstOrDefault(y=> y.Login == User.Identity.Name).PersonModelId);
-                tmp.Email = field;
-                DataBase.SaveChanges();
-            }
+                personService.Edit(DataBase, userService, User.Identity.Name, new PersonModel() { Email = field}, "Email");
             return RedirectToAction("Index");
         }
+
         public IActionResult EditCountry(AdressModel model)
         {
             if (!string.IsNullOrEmpty(model.Country))
-            {
-                AdressModel tmp = DataBase.Adresses.FirstOrDefault(y => y.Id == DataBase.Persons.FirstOrDefault(u => u.Id == DataBase.Users.FirstOrDefault(x => x.Login == User.Identity.Name).PersonModelId).AdressModelID);
-                tmp.Country = model.Country;
-                DataBase.SaveChanges();
-
-            }
+                adressService.Edit(DataBase, personService, userService, User.Identity.Name, model, "Country");
             return RedirectToAction("Index");
         }
         public IActionResult EditCity(AdressModel model)
         {
             if (!string.IsNullOrEmpty(model.City))
-            {
-                AdressModel tmp = DataBase.Adresses.FirstOrDefault(y => y.Id == DataBase.Persons.FirstOrDefault(u => u.Id == DataBase.Users.FirstOrDefault(x => x.Login == User.Identity.Name).PersonModelId).AdressModelID);
-                tmp.City = model.City;
-                DataBase.SaveChanges();
-
-            }
+                adressService.Edit(DataBase, personService, userService, User.Identity.Name, model, "City");
             return RedirectToAction("Index");
         }
         public IActionResult EditStreet(AdressModel model)
         {
             if (!string.IsNullOrEmpty(model.Street))
-            {
-                AdressModel tmp = DataBase.Adresses.FirstOrDefault(y => y.Id == DataBase.Persons.FirstOrDefault(u => u.Id == DataBase.Users.FirstOrDefault(x => x.Login == User.Identity.Name).PersonModelId).AdressModelID);
-                tmp.Street = model.Street;
-                DataBase.SaveChanges();
-
-            }
+                adressService.Edit(DataBase, personService, userService, User.Identity.Name, model, "Street");
             return RedirectToAction("Index");
         }
         public IActionResult EditPostIndex(AdressModel model)
         {
-            AdressModel tmp = DataBase.Adresses.FirstOrDefault(y => y.Id == DataBase.Persons.FirstOrDefault(u => u.Id == DataBase.Users.FirstOrDefault(x => x.Login == User.Identity.Name).PersonModelId).AdressModelID);
-            tmp.PostIndex = model.PostIndex;
-            DataBase.SaveChanges();
+            adressService.Edit(DataBase, personService, userService, User.Identity.Name, model, "PostIndex");
             return RedirectToAction("Index");
         }
 
 
         public IActionResult EditNameBank(RecipientDetailsModel model)
         {
-            if(!string.IsNullOrEmpty(model.Name))
-            {
-                RecipientDetailsModel tmp = DataBase.RecipientDetails.FirstOrDefault(y => y.Id == DataBase.Persons.FirstOrDefault(u => u.Id == DataBase.Users.FirstOrDefault(x => x.Login == User.Identity.Name).PersonModelId).RecipientDetailsModelId);
-                tmp.Name = model.Name;
-                DataBase.SaveChanges();
-            }
+            if (!string.IsNullOrEmpty(model.Name))
+                bankDetailsService.Edit(DataBase, personService, userService, User.Identity.Name, model, "Name");
             return RedirectToAction("Index");
         }
         public IActionResult EditINN(RecipientDetailsModel model)
         {
-            RecipientDetailsModel tmp = DataBase.RecipientDetails.FirstOrDefault(y => y.Id == DataBase.Persons.FirstOrDefault(u => u.Id == DataBase.Users.FirstOrDefault(x => x.Login == User.Identity.Name).PersonModelId).RecipientDetailsModelId);
-            tmp.INN = model.INN;
-            DataBase.SaveChanges();
+            bankDetailsService.Edit(DataBase, personService, userService, User.Identity.Name, model, "INN");
             return RedirectToAction("Index");
         }
         public IActionResult EditKPP(RecipientDetailsModel model)
         {
-            RecipientDetailsModel tmp = DataBase.RecipientDetails.FirstOrDefault(y => y.Id == DataBase.Persons.FirstOrDefault(u => u.Id == DataBase.Users.FirstOrDefault(x => x.Login == User.Identity.Name).PersonModelId).RecipientDetailsModelId);
-            tmp.KPP = model.KPP;
-            DataBase.SaveChanges();
+            bankDetailsService.Edit(DataBase, personService, userService, User.Identity.Name, model, "KPP");
             return RedirectToAction("Index");
         }
         public IActionResult EditAccountNumber(RecipientDetailsModel model)
         {
-            RecipientDetailsModel tmp = DataBase.RecipientDetails.FirstOrDefault(y => y.Id == DataBase.Persons.FirstOrDefault(u => u.Id == DataBase.Users.FirstOrDefault(x => x.Login == User.Identity.Name).PersonModelId).RecipientDetailsModelId);
-            tmp.AccountNumber = model.AccountNumber;
-            DataBase.SaveChanges();
+            bankDetailsService.Edit(DataBase, personService, userService, User.Identity.Name, model, "AccountNumber");
             return RedirectToAction("Index");
         }
         public IActionResult EditBIK(RecipientDetailsModel model)
         {
-            RecipientDetailsModel tmp = DataBase.RecipientDetails.FirstOrDefault(y => y.Id == DataBase.Persons.FirstOrDefault(u => u.Id == DataBase.Users.FirstOrDefault(x => x.Login == User.Identity.Name).PersonModelId).RecipientDetailsModelId);
-            tmp.BIK = model.BIK;
-            DataBase.SaveChanges();
+            bankDetailsService.Edit(DataBase, personService, userService, User.Identity.Name, model, "BIK");
             return RedirectToAction("Index");
         }
         public IActionResult EditCorrespondentAccount(RecipientDetailsModel model)
         {
-            RecipientDetailsModel tmp = DataBase.RecipientDetails.FirstOrDefault(y => y.Id == DataBase.Persons.FirstOrDefault(u => u.Id == DataBase.Users.FirstOrDefault(x => x.Login == User.Identity.Name).PersonModelId).RecipientDetailsModelId);
-            tmp.CorrespondentAccount = model.CorrespondentAccount;
-            DataBase.SaveChanges();
+            bankDetailsService.Edit(DataBase, personService, userService, User.Identity.Name, model, "CorrespondentAccount");
             return RedirectToAction("Index");
         }
 
 
         public IActionResult EditNameCredit(SenderDetailsModel model)
         {
-            SenderDetailsModel tmp = DataBase.SenderDetails.FirstOrDefault(y => y.Id == DataBase.Persons.FirstOrDefault(u => u.Id == DataBase.Users.FirstOrDefault(x => x.Login == User.Identity.Name).PersonModelId).SenderDetailsModelId);
-            tmp.Name = model.Name;
-            DataBase.SaveChanges();
+            creditDetalisService.Edit(DataBase, personService, userService, User.Identity.Name, model, "Name");
             return RedirectToAction("Index");
         }
         public IActionResult EditSernameCredit(SenderDetailsModel model)
         {
-            SenderDetailsModel tmp = DataBase.SenderDetails.FirstOrDefault(y => y.Id == DataBase.Persons.FirstOrDefault(u => u.Id == DataBase.Users.FirstOrDefault(x => x.Login == User.Identity.Name).PersonModelId).SenderDetailsModelId);
-            tmp.Sername = model.Sername;
-            DataBase.SaveChanges();
+            creditDetalisService.Edit(DataBase, personService, userService, User.Identity.Name, model, "Sername");
             return RedirectToAction("Index");
         }
         public IActionResult EditNumberCart(SenderDetailsModel model)
         {
-            SenderDetailsModel tmp = DataBase.SenderDetails.FirstOrDefault(y => y.Id == DataBase.Persons.FirstOrDefault(u => u.Id == DataBase.Users.FirstOrDefault(x => x.Login == User.Identity.Name).PersonModelId).SenderDetailsModelId);
-            tmp.NumberCart = model.NumberCart;
-            DataBase.SaveChanges();
+            creditDetalisService.Edit(DataBase, personService, userService, User.Identity.Name, model, "NumberCart");
             return RedirectToAction("Index");
         }
         public IActionResult EditCVC(SenderDetailsModel model)
         {
-            SenderDetailsModel tmp = DataBase.SenderDetails.FirstOrDefault(y => y.Id == DataBase.Persons.FirstOrDefault(u => u.Id == DataBase.Users.FirstOrDefault(x => x.Login == User.Identity.Name).PersonModelId).SenderDetailsModelId);
-            tmp.CVC = model.CVC;
-            DataBase.SaveChanges();
+            creditDetalisService.Edit(DataBase, personService, userService, User.Identity.Name, model, "CVC");
             return RedirectToAction("Index");
         }
         public IActionResult EditDatetime(SenderDetailsModel model)
         {
-            SenderDetailsModel tmp = DataBase.SenderDetails.FirstOrDefault(y => y.Id == DataBase.Persons.FirstOrDefault(u => u.Id == DataBase.Users.FirstOrDefault(x => x.Login == User.Identity.Name).PersonModelId).SenderDetailsModelId);
-            tmp.dateTime = model.dateTime;
-            DataBase.SaveChanges();
+            creditDetalisService.Edit(DataBase, personService, userService, User.Identity.Name, model, "dateTime");
             return RedirectToAction("Index");
+        }
+
+        public ActionResult RemoveAdress()
+        {
+            adressService.Delete(DataBase, personService, userService, User.Identity.Name);
+            return RedirectToAction("Index");
+        }
+        public ActionResult RemoveBankDetails()
+        {
+            bankDetailsService.Delete(DataBase, personService, userService, User.Identity.Name);
+            return RedirectToAction("Index");
+        }
+        public ActionResult CreditDetails()
+        {
+            creditDetalisService.Delete(DataBase, personService, userService, User.Identity.Name);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Back()
+        {
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Lot()
+        {
+            return RedirectToAction("Index", "Lot");
         }
     }
 }

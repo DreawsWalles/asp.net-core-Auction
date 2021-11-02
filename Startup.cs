@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using project.DAL;
+using project.Services.Interfaces;
+using project.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,9 +28,17 @@ namespace project
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connection = Configuration.GetConnectionString("DefaultConnection");
+            string connection = Configuration.GetConnectionString("MainConnection");
             services.AddDbContext<AuctionContext>(options => options.UseSqlServer(connection));
             services.AddControllersWithViews();
+
+            services.AddTransient<IUserAction, UserAction>();
+            services.AddTransient<IPersonAction, PersonAction>();
+            services.AddTransient<IUserAdressAction, UserAdressAction>();
+            services.AddTransient<IRecipientDetailsAction, RecipientDetailsAction>();
+            services.AddTransient<ISenderDetailsAction, SenderDetailsAction>();
+            
+            services.AddSingleton<ISingletonPath, SingletonPath>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => //CookieAuthenticationOptions

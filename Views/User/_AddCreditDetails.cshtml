@@ -2,7 +2,12 @@
 
 <div class="Adress">
                 <span>Credit details</span>
-                 <button id="btn-up-down-3" type="submit" class="btn edit btn-outline-secondary" onclick="upDown('Credit-content', 'btn-up-down-3')">▼</button>
+                <div style="display:flex">
+                    <button id="btn-up-down-3" type="submit" class="btn edit btn-outline-secondary" onclick="upDown('Credit-content', 'btn-up-down-3')">▼</button>
+                    <form asp-action="CreditDetails" asp-controller="User">
+                    <button type="submit" class="btn edit btn-outline-secondary">✖</button>
+                </form>
+                </div>
             </div>
  <div id="Credit-content">
                  <hr />
