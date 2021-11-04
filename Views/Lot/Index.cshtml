@@ -28,6 +28,50 @@
         font-family:'Century Gothic';
         font-size:22px;
     }
+    .card{
+        border-radius: 45px;
+        padding-top:1em;
+        display:inline-block;
+        align-content:center;
+        font-family:'Century Gothic';
+        font-style:inherit;
+        margin-top:2em;
+    }
+    .card:hover{
+        box-shadow: 0 0 25px rgba(0,0,0,0.5);
+    }
+    .card a{
+        color:black;
+        display:block;
+        text-align: right;
+        font-size:24px;
+        margin-right:1em;
+    }
+    .card a:hover{
+        color:red;
+    }
+    .image{
+        width:12vw;
+        margin:0 auto;
+        margin-bottom:1em;
+    }
+    .card img{
+        display:block;
+        margin:0 auto;
+        height:18vh;
+        width:10vw;
+    }
+    .card button{
+        margin-top:0.7em;
+        width:12vw;
+        margin-left:1em;
+    }
+    .card:nth-child(2n){
+        margin-left:2vw;
+        margin-right:2vw;
+    }
+    .list-group-item{
+    }
 </style>
 <div class="content">
     <div class="header">
@@ -39,24 +83,42 @@
     <hr />
     <div class="main-content">
         @{
-            if(Model.Count() == 0)
+            if(Model == null)
             {
                 <span class="span-center">Вы ещё не добавили ни одного лота</span>
             }
-            else
+        }
+    </div>
+    <div class="row justify-content-center">
+    @{
+            if(Model != null)
             {
                 foreach(project.Models.Product.ProductModel element in Model)
                 {
-                    <div class= "item">
-                        <a>✖</a>
-                        <div class="image">
-                            <img id="img" src="@element.Path" class="img-fluid">
+                        <div class="card" style="width: 18rem;">
+                        <a asp-action="RemoveLot" asp-controller="Lot" asp-route-id="@element.Id">✖</a>
+                          <img src="@element.Path" class="card-img-top" >
+                          <div class="card-body">
+                            <h5 class="card-title">@element.Name</h5>
+                            <p class="card-text">@element.Comments</p>
+                          </div>
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Добавлено: @element.Date.Day.@element.Date.Month.@element.Date.Year</li>
+                            @if(@element.IsBuy)
+                            {
+                                <li class="list-group-item">Продано</li>
+                            }
+                            else
+                            {
+                                <li class="list-group-item">Не продано</li>
+                            }
+                          </ul>
+                          <div class="card-body">
+                            <form asp-action="EditLot" asp-controller="Lot" asp-route-id="@element.Id">
+                                <button type="submit" class="btn edit btn-info">Редактировать</button>
+                            </form>
+                          </div>
                         </div>
-                        <span>@element.Name</span>
-                        <form asp-action="RemoveAdress" asp-controller="User">
-                            <button type="submit" class="btn edit btn-outline-secondary">Посмотреть</button>
-                        </form>
-                    </div>
                 }
 
             }

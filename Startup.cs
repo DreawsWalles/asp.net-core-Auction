@@ -37,8 +37,9 @@ namespace project
             services.AddTransient<IUserAdressAction, UserAdressAction>();
             services.AddTransient<IRecipientDetailsAction, RecipientDetailsAction>();
             services.AddTransient<ISenderDetailsAction, SenderDetailsAction>();
+            services.AddTransient<IFileHistoryAction, FileHistoryAction>();
+            services.AddTransient<IProductModelAction, ProductModelAction>();
             
-            services.AddSingleton<ISingletonPath, SingletonPath>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => //CookieAuthenticationOptions

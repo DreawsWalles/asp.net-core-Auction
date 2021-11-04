@@ -10,8 +10,8 @@ using project.DAL;
 namespace project.Migrations
 {
     [DbContext(typeof(AuctionContext))]
-    [Migration("20211101204436_mig2")]
-    partial class mig2
+    [Migration("20211103201306_mig")]
+    partial class mig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -106,6 +106,27 @@ namespace project.Migrations
                     b.HasIndex("UserModelId");
 
                     b.ToTable("BettingHistories");
+                });
+
+            modelBuilder.Entity("project.Models.FileHistoryModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ModelId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserModelId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FileHistory");
                 });
 
             modelBuilder.Entity("project.Models.Person.PersonModel", b =>
@@ -223,13 +244,13 @@ namespace project.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ImagePath")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsBuy")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("TypeProductModelId")

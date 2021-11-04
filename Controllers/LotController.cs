@@ -18,15 +18,17 @@ namespace project.Controllers
         readonly AuctionContext DataBase;
         readonly IUserAction userService;
         LotModel modelLot = new LotModel();
-        IWebHostEnvironment _appEnvironment;
-        ISingletonPath path;
+        IWebHostEnvironment appEnvironment;
+        IFileHistoryAction fileService;
+        IProductModelAction productService;
 
-        public LotController(AuctionContext context, IUserAction userService, IWebHostEnvironment appEnvironment, ISingletonPath path)
+        public LotController(AuctionContext context, IUserAction userService, IWebHostEnvironment appEnvironment, IFileHistoryAction fileService, IProductModelAction productService)
         {
             DataBase = context;
             this.userService = userService;
-            _appEnvironment = appEnvironment;
-            this.path = path;
+            this.appEnvironment = appEnvironment;
+            this.fileService = fileService;
+            this.productService = productService;
         }
         public IActionResult Index()
         {
@@ -37,13 +39,17 @@ namespace project.Controllers
                     products.Add(element);
             if (products.Count > 0)
                 user.Products = products;
+            fileService.Clear(DataBase, userService, User.Identity.Name);
+            DataBase.SaveChanges();
             return View(user.Products);
         }
 
         [HttpGet]
         public IActionResult AddLot()
         {
-            modelLot = new LotModel() { Path = path.Name };
+            FileHistoryModel tmp = fileService.Get(DataBase, userService, User.Identity.Name);
+            if (tmp != null)
+                modelLot.Path = tmp.Path;
             return View(modelLot);
         }
 
@@ -60,20 +66,7 @@ namespace project.Controllers
         [HttpPost]
         public IActionResult AddLot(LotModel model)
         {
-            ProductModel tmp = new ProductModel() 
-            { 
-                Name = model.Name, 
-                Comments = model.Comments, 
-                IsBuy = false, Date = DateTime.Now, 
-                UserModelId = userService.Get(DataBase, User.Identity.Name).Id, 
-                TypeProductModelId = model.type
-            };
-            if (path.Name == null)
-                tmp.Path = _products[model.type];
-            else
-                tmp.Path = path.Name;
-            DataBase.Products.Add(tmp);
-            DataBase.SaveChanges();
+            productService.Add(DataBase, fileService, userService, User.Identity.Name, model);
             return RedirectToAction("Index");
         }
 
@@ -81,17 +74,59 @@ namespace project.Controllers
         public async Task<IActionResult> AddFile(IFormFile uploadedFile)
         {
             if (uploadedFile != null)
-            {
-                // путь к папке Files
-                string path = "/image/" + uploadedFile.FileName;
-                // сохраняем файл в папку Files в каталоге wwwroot
-                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
-                {
-                    await uploadedFile.CopyToAsync(fileStream);
-                }
-                this.path.Name = path;
-            }
+                await fileService.Add(DataBase, userService, User.Identity.Name, uploadedFile, appEnvironment);
             return RedirectToAction("AddLot");
+        }
+        public IActionResult EditLot(int id)
+        {
+            int Id = 0;
+            string path = null;
+            UserModel user = userService.Get(DataBase, User.Identity.Name);
+            foreach (FileHistoryModel element in DataBase.FileHistory)
+                if (element.UserModelId == user.Id)
+                {
+                    Id = element.ModelId;
+                    path = element.Path;
+                }
+            if (Id == 0)
+                Id = id;
+            ProductModel tmp = DataBase.Products.FirstOrDefault(x => x.Id == Id);
+            LotModel model = new LotModel()
+            {
+                Id = tmp.Id,
+                Name = tmp.Name,
+                type = (int)tmp.TypeProductModelId,
+                Comments = tmp.Comments,
+            };
+            if (path == null)
+                model.Path = tmp.Path;
+            else
+                model.Path = path;
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditFile(IFormFile uploadedFile, int id)
+        {
+            if (uploadedFile != null)
+                await fileService.Add(DataBase, userService, User.Identity.Name, uploadedFile, appEnvironment, id);
+            return RedirectToAction("EditLot");
+        }
+
+        [HttpPost]
+        public IActionResult LotEdit(LotModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                productService.Edit(DataBase, fileService, userService, User.Identity.Name, model);
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+        public IActionResult RemoveLot(int id)
+        {
+            productService.Remove(DataBase, id);
+            return RedirectToAction("Index");
         }
     }
 }

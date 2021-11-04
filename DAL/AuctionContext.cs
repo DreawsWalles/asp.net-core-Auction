@@ -18,6 +18,8 @@ namespace project.DAL
         public DbSet<RecipientDetailsModel> RecipientDetails { get; set; }
         public DbSet<SenderDetailsModel> SenderDetails {  get; set; }
         public DbSet<TypeProductModel> TypeProducts { get; set; }
+        public DbSet<FileHistoryModel> FileHistory { get; set; }
+
 
         public AuctionContext(DbContextOptions<AuctionContext> options) : base(options)
         {

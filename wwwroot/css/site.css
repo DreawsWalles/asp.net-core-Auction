@@ -1,6 +1,13 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+@font-face {
+    font-family: "ArchiveRegular";
+    src: url("Archive-Regular.otf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+} 
+
 header {
     background-color: black;
     display: flex;
@@ -51,7 +58,7 @@ a {
     padding: 16px;
     border: none;
     background-color: black;
-    font-family: 'Times New Roman';
+    font-family: 'ArchiveRegular';
     font-style: normal;
     font-weight: normal;
     font-size: 22px;
@@ -97,8 +104,8 @@ a {
     color: #7C45C5;
 }
 
-.point-2{
-    font-family: 'Times New Roman';
+.point-2 {
+    font-family: 'ArchiveRegular';
     font-size: 22px;
     line-height: 25px;
     letter-spacing: 0.1em;
@@ -111,7 +118,7 @@ a {
     color: #7C45C5;
 }
 .point-3 {
-    font-family: 'Times New Roman';
+    font-family: 'ArchiveRegular';
     font-size: 22px;
     line-height: 25px;
     letter-spacing: 0.1em;

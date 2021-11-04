@@ -1,8 +1,9 @@
 ﻿@model project.Models.LotModel;
 @{
-    ViewData["Title"] = "AddLot";
+    ViewData["Title"] = "EditLot";
     Layout = "~/Views/Shared/_LayoutMainPageLog.cshtml";
 }
+
 <style>
     .content{
     justify-content:space-between;
@@ -65,7 +66,7 @@
         }        
         </div>
         <div class="form-group col-md-6">
-            <form id="mainForm" asp-action="AddLot" asp-controller="Lot" method="post">
+            <form id="mainForm" asp-action="LotEdit" asp-controller="Lot" method="post" asp-route-Id="@Model.Id">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroup-sizing-default">Название лота</span>
@@ -93,7 +94,7 @@
               <input required asp-for="Comments" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Комментарии">
             </div>
             </form>
-            <form id="imageForm" asp-action="AddFile" asp-controller="Lot" method="post" enctype="multipart/form-data">
+            <form id="imageForm" asp-action="EditFile" asp-controller="Lot" method="post" enctype="multipart/form-data" asp-route-Id="@Model.Id">
                 <div class="input-group mb-6">
                     <div class="input-group-prepend">
                         <button class="btn btn-outline-secondary" type="submit">Загрузить</button>
@@ -105,7 +106,7 @@
                 </div>
             </form>
             <div class="input-group mb-3">
-                <button form="mainForm" class="btn btn-success" type="submit">Добавить</button>
+                <button form="mainForm" class="btn btn-success" type="submit">Сохранить</button>
             </div>
         </div>
       </div>
@@ -137,3 +138,4 @@
         }
     }
 </script>
+
