@@ -93,6 +93,12 @@
               </div>
               <input required asp-for="Comments" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Комментарии">
             </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">Цена</span>
+              </div>
+              <input required asp-for="Price" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="0">
+            </div>
             </form>
             <form id="imageForm" asp-action="EditFile" asp-controller="Lot" method="post" enctype="multipart/form-data" asp-route-Id="@Model.Id">
                 <div class="input-group mb-6">

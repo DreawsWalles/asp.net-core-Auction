@@ -16,6 +16,8 @@ namespace project.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
         public int? PersonModelId { get; set; }
+        public string? FilePath { get; set; }
+        public decimal? Money { get; set; }
 
         public virtual PersonModel PersonModel { get; set; }
         public virtual ICollection<ProductModel> Products { get; set; }

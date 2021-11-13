@@ -15,6 +15,8 @@ using project.Models.Adress;
 using System;
 using project.Services.Interfaces;
 using project.Models.Product;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 
 namespace project.Controllers
 {
@@ -26,7 +28,11 @@ namespace project.Controllers
         readonly IUserAdressAction adressService;
         readonly IRecipientDetailsAction bankDetailsService;
         readonly ISenderDetailsAction creditDetalisService;
-        public UserController(AuctionContext context, IUserAction userService, IPersonAction personService, IUserAdressAction adressService, IRecipientDetailsAction bankDetailsService, ISenderDetailsAction creditDetalisService)
+        IWebHostEnvironment appEnvironment;
+        IFileHistoryAction fileService;
+        public UserController(AuctionContext context, IUserAction userService, IPersonAction personService, IUserAdressAction adressService, 
+                                                      IRecipientDetailsAction bankDetailsService, ISenderDetailsAction creditDetalisService, 
+                                                      IWebHostEnvironment appEnvironment, IFileHistoryAction fileService)
         {
             DataBase = context;
             this.userService = userService;
@@ -34,6 +40,8 @@ namespace project.Controllers
             this.adressService = adressService;
             this.bankDetailsService = bankDetailsService;
             this.creditDetalisService = creditDetalisService;
+            this.appEnvironment = appEnvironment;
+            this.fileService = fileService;
         }
         [Authorize]
         public IActionResult Index()
@@ -43,6 +51,7 @@ namespace project.Controllers
             user.PersonModel.Adress = adressService.Get(DataBase, personService, userService, User.Identity.Name);
             user.PersonModel.RecipientDetailsModels = bankDetailsService.Get(DataBase, personService, userService, User.Identity.Name);
             user.PersonModel.SenderDetails = creditDetalisService.Get(DataBase, personService, userService, User.Identity.Name) ;
+            fileService.Clear(DataBase, userService, User.Identity.Name);
             return View(user);
         }
         [ValidateAntiForgeryToken]
@@ -70,6 +79,30 @@ namespace project.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
 
+
+        public IActionResult EditPhoto()
+        {
+            UserModel user = userService.Get(DataBase, User.Identity.Name);
+            return View(user);
+        }
+
+        public async Task<IActionResult> AddFile(IFormFile uploadedFile)
+        {
+            if (uploadedFile != null)
+            {
+                await fileService.Add(DataBase, userService, User.Identity.Name, uploadedFile, appEnvironment);
+                userService.Edit(DataBase, User.Identity.Name, new UserModel() { FilePath = "/image/" + uploadedFile.FileName }, "Image");
+            }
+            return RedirectToAction("EditPhoto");
+        }
+        public IActionResult SaveFile()
+        {
+            UserModel user = userService.Get(DataBase, User.Identity.Name);
+            if(user.FilePath == null)
+                userService.Edit(DataBase, User.Identity.Name, new UserModel() { FilePath = "/image/car.svg" }, "Image");
+            return RedirectToAction("Index");
+        }
+
         public ActionResult EditPerson()
         {
             return PartialView("_EditPerson");
@@ -93,41 +126,41 @@ namespace project.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
+            
         public IActionResult EditPassword(string password)
         {
             if (!string.IsNullOrEmpty(password))
                 userService.Edit(DataBase, User.Identity.Name, new UserModel() { Password = password }, "Password");
             return RedirectToAction("Index");
         }
-        public IActionResult EditName(string name)
+        public IActionResult EditName(PersonModel model)
         {
-            if (!string.IsNullOrEmpty(name))
-                personService.Edit(DataBase, userService, User.Identity.Name, new PersonModel() { Name = name}, "Name");
+            if (model != null)
+                personService.Edit(DataBase, userService, User.Identity.Name, model, "Name");
             return RedirectToAction("Index");
         }
-        public IActionResult EditSername(string name)
+        public IActionResult EditSername(PersonModel model)
         {
-            if (!string.IsNullOrEmpty(name))
-                personService.Edit(DataBase, userService, User.Identity.Name, new PersonModel() { Sername = name}, "Sername");
+            if (model != null)
+                personService.Edit(DataBase, userService, User.Identity.Name, model, "Sername");
             return RedirectToAction("Index");
         }
-        public IActionResult EditPatronymic(string field)
+        public IActionResult EditPatronymic(PersonModel model)
         {
-            if (!string.IsNullOrEmpty(field))
-                personService.Edit(DataBase, userService, User.Identity.Name, new PersonModel() { Patronymic = field}, "Patronymic");
+            if (model != null)
+                personService.Edit(DataBase, userService, User.Identity.Name, model, "Patronymic");
             return RedirectToAction("Index");
         }
-        public IActionResult EditPhone(string field)
+        public IActionResult EditPhone(PersonModel model)
         {
-            if (!string.IsNullOrEmpty(field))
-                personService.Edit(DataBase, userService, User.Identity.Name, new PersonModel() { Phone = field}, "Phone");
+            if (model != null)
+                personService.Edit(DataBase, userService, User.Identity.Name, model, "Phone");
             return RedirectToAction("Index");
         }
-        public IActionResult EditEmail(string field)
+        public IActionResult EditEmail(PersonModel model)
         {
-            if (!string.IsNullOrEmpty(field))
-                personService.Edit(DataBase, userService, User.Identity.Name, new PersonModel() { Email = field}, "Email");
+            if (model != null)
+                personService.Edit(DataBase, userService, User.Identity.Name, model, "Email");
             return RedirectToAction("Index");
         }
 
@@ -239,6 +272,29 @@ namespace project.Controllers
         public IActionResult Lot()
         {
             return RedirectToAction("Index", "Lot");
+        }
+
+        [HttpGet]
+        public IActionResult AddCash()
+        {
+            return View();
+        }
+
+        private bool Check(SenderDetailsModel model) => true;
+
+        [HttpPost]
+        public IActionResult AddCash(SenderDetailsModel model, int sum)
+        {
+            if (ModelState.IsValid)
+            {
+                if (sum > 0 && Check(model))
+                {
+                    userService.Edit(DataBase, User.Identity.Name, new UserModel() { Money = sum }, "Cash");
+                    return RedirectToAction("Index");
+                }
+                return View();
+            }
+            return View();
         }
     }
 }

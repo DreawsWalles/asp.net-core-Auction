@@ -1,0 +1,87 @@
+﻿@model project.Models.Person.SenderDetailsModel;
+@{
+    ViewData["Title"] = "AddCash";
+    Layout = "~/Views/Shared/_LayoutMainPageLog.cshtml";
+}
+<style>
+    .header span{
+    font-family:'Century Gothic';
+    font-size:28px;
+    margin-top:0.4em;
+}
+    hr{
+        margin-top:0em;
+        margin-bottom:2em;
+        margin-bottom:2em;
+    }
+    .back a{
+        color:black;
+        background-color:#7C45C5;
+        position:fixed;
+        left:0;
+        top:40vh;
+        font-size:35px;
+        padding-left:0.2em;
+        padding-right:0.2em;
+        padding-top:0.4em;
+        padding-bottom:0.4em;
+    }
+    .back a:hover{
+        color:white;
+    }
+</style>
+<div class="back">
+    <a asp-action="Index" asp-controller="User">⮜</a>
+</div>
+<div class="container">
+    <div class="header">
+        <span>Пополнение счета</span>
+    </div>
+    <hr/>
+<form method="post" asp-action="AddCash" asp-controller="User">
+    <div class="row justify-content-between">
+    <div class="col-6">
+      <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default">Имя</span>
+          <input required asp-for="Name" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+    </div>
+    <div class="col-6">
+      <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default">Фамилия</span>
+          <input required asp-for="Sername" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+    </div>
+    </div>
+    <div class="row justify-content-between">
+    <div class="col-6">
+      <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default">Номер карты</span>
+          <input required asp-for="NumberCart" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+    </div>
+    <div class="col-4">
+      <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default">Срок действия</span>
+          <input required asp-for="dateTime" type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+    </div>
+    <div class="col-2">
+      <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default">CVC</span>
+          <input required asp-for="CVC" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+    </div>
+    </div>
+    <div class="row justify-content-start">
+        <div class="col-4">
+          <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default">Сумма пополнения</span>
+          <input required name="sum" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-success">Пополнить счет</button>
+</form>
+</div>
+

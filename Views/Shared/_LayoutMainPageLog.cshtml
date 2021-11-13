@@ -4,8 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-grid.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-reboot.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+
 </head>
 <body>
     <header>
@@ -38,8 +41,10 @@
             <img class="dropbtn" src="~/image/account_circle.svg" />
             <div class="dropdown-content acc">
                 <a asp-action="Index" asp-controller="User">Мой профиль</a>
+                <a asp-action="Index" asp-controller="Friends">Друзья</a>
+                <a href="#">Диалоги</a>
                 <a asp-action="Lot" asp-controller="User">Мои лоты</a>
-                 <a href="#">Мои аукционы</a>
+                <a asp-action="Index" asp-controller="Auction">Мои аукционы</a>
                 <a href="#">Мои торги</a>
                 <a asp-action="Logout" asp-controller="Account">Выход</a>
             </div>   

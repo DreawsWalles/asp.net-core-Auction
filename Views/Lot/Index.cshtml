@@ -11,8 +11,6 @@
         width:85%;
         margin:0 auto;
     }
-    .content{
-    }
     .header span{
         font-family:'Century Gothic';
         font-size:28px;
@@ -70,8 +68,6 @@
         margin-left:2vw;
         margin-right:2vw;
     }
-    .list-group-item{
-    }
 </style>
 <div class="content">
     <div class="header">
@@ -104,6 +100,7 @@
                           </div>
                           <ul class="list-group list-group-flush">
                             <li class="list-group-item">Добавлено: @element.Date.Day.@element.Date.Month.@element.Date.Year</li>
+                             <li class="list-group-item">@element.TypeProduct.Name</li>
                             @if(@element.IsBuy)
                             {
                                 <li class="list-group-item">Продано</li>
@@ -112,6 +109,7 @@
                             {
                                 <li class="list-group-item">Не продано</li>
                             }
+                            <li class="list-group-item">@element.Price $</li>
                           </ul>
                           <div class="card-body">
                             <form asp-action="EditLot" asp-controller="Lot" asp-route-id="@element.Id">

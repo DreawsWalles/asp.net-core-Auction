@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_LayoutMainPageLog.cshtml";
 }
 <style>
+    body{
+        font-family:'Century Gothic';
+    }
     .header{
         display:flex;
         justify-content:space-between;
@@ -83,6 +86,32 @@
         background: rgba(236, 217, 251, 0.89);
         margin-left:0.5em;
     }
+    .spanTwo{
+        display:flex;
+    }
+    .spanTwo button{
+        margin-left:1em;
+    }
+    .image{
+        display:flex;
+        margin-left:1em;
+    }
+    .spanTwo img{
+        width:2vw;
+    }
+    .image button{
+    }
+    .Money{
+        font-family:'Century Gothic';
+        position:fixed;
+        right:6vw;
+        display:inline-block;
+    }
+    .Money span{
+        display:block;
+        text-align:right;
+        margin-right:1em;
+    }
 </style>
 <div class="menu">
     <a href="#Account">Данныые пользователя</a>
@@ -90,11 +119,38 @@
     <a href="#BankDetails">Банковские реквизиты</a>
     <a href="#CreditDetails">Банковская карта</a>
 </div>
+<div class="Money">
+    <span>
+        @{
+            @String.Format("{0:C}", @Model.Money);
+        }
+    </span>
+    <a asp-action="AddCash" class="btn btn-outline-success">Пополнить счет</a>
+</div>
 <div class="content">
     <a name="Account"></a> 
     <div class="header">
         <span class="spanOne">Account</span>
-        <span class="spanTwo">@Model.Login</span>
+        <div class="spanTwo">
+            <span>@Model.Login</span>
+            @{
+                if (@Model.FilePath == null)
+                {
+                    <form asp-action="EditPhoto">
+                        <button type="submit" class="btn edit btn-secondary">Добавить фото</button>
+                    </form>
+                }
+                else
+                {
+                    <div class="image">
+                        <img src=@Model.FilePath class="img-fluid">
+                        <form asp-action="EditPhoto">
+                            <button type="submit" class="btn edit btn-outline-secondary">✎</button>
+                        </form>
+                    </div>
+                }
+            }
+        </div>
     </div>
 <hr id="firstHr"/>
     <div class="item">
@@ -127,7 +183,13 @@
         }
         else
         {
-            await Html.RenderPartialAsync("_AddAdress", new project.Models.Adress.AdressModel(){Country = Model.PersonModel.Adress.Country, City = Model.PersonModel.Adress.City, Street = Model.PersonModel.Adress.Street, PostIndex = Model.PersonModel.Adress.PostIndex});
+            await Html.RenderPartialAsync("_AddAdress", new project.Models.Adress.AdressModel()
+            {
+                Country = Model.PersonModel.Adress.Country, 
+                City = Model.PersonModel.Adress.City, 
+                Street = Model.PersonModel.Adress.Street, 
+                PostIndex = Model.PersonModel.Adress.PostIndex
+            });
         }
     }
             <hr />

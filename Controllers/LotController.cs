@@ -33,14 +33,11 @@ namespace project.Controllers
         public IActionResult Index()
         {
             UserModel user = userService.Get(DataBase, User.Identity.Name);
-            ICollection<ProductModel> products = new List<ProductModel>();
-            foreach(ProductModel element in DataBase.Products)
-                if(element.UserModelId == user.Id)
-                    products.Add(element);
+            ICollection<ProductModel> products = productService.GetCollection(DataBase, userService, User.Identity.Name);
             if (products.Count > 0)
                 user.Products = products;
+
             fileService.Clear(DataBase, userService, User.Identity.Name);
-            DataBase.SaveChanges();
             return View(user.Products);
         }
 
@@ -53,16 +50,6 @@ namespace project.Controllers
             return View(modelLot);
         }
 
-        private Dictionary<int, string> _products = new Dictionary<int, string>()
-        {
-            {1, "/image/car.svg" },
-            {2, "/image/food.svg"},
-            {3, "/image/jacket.svg"},
-            {4, "/image/nedvizh.svg"},
-            {5, "/image/culture.svg"},
-            {6, "/image/tea.svg"}
-        };
-
         [HttpPost]
         public IActionResult AddLot(LotModel model)
         {
@@ -71,7 +58,7 @@ namespace project.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddFile(IFormFile uploadedFile)
+        public async Task<IActionResult> AddFile(IFormFile uploadedFile, LotModel model)
         {
             if (uploadedFile != null)
                 await fileService.Add(DataBase, userService, User.Identity.Name, uploadedFile, appEnvironment);
@@ -79,29 +66,32 @@ namespace project.Controllers
         }
         public IActionResult EditLot(int id)
         {
-            int Id = 0;
-            string path = null;
-            UserModel user = userService.Get(DataBase, User.Identity.Name);
-            foreach (FileHistoryModel element in DataBase.FileHistory)
-                if (element.UserModelId == user.Id)
-                {
-                    Id = element.ModelId;
-                    path = element.Path;
-                }
-            if (Id == 0)
-                Id = id;
-            ProductModel tmp = DataBase.Products.FirstOrDefault(x => x.Id == Id);
-            LotModel model = new LotModel()
+            LotModel model;
+            if (id == 0)
             {
-                Id = tmp.Id,
-                Name = tmp.Name,
-                type = (int)tmp.TypeProductModelId,
-                Comments = tmp.Comments,
-            };
-            if (path == null)
-                model.Path = tmp.Path;
+                FileHistoryModel file = fileService.Get(DataBase, userService, User.Identity.Name);
+                ProductModel product = productService.Get(DataBase, file.ModelId);
+                model = new LotModel()
+                {
+                    Id = product.Id,
+                    Name= product.Name,
+                    type = (int)product.TypeProductModelId,
+                    Comments= product.Comments,
+                    Path = file.Path
+                };
+            }
             else
-                model.Path = path;
+            {
+                ProductModel product = productService.Get(DataBase, id);
+                model = new LotModel()
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    type = (int)product.TypeProductModelId,
+                    Comments = product.Comments,
+                    Path = product.Path
+                };
+            }
             return View(model);
         }
 

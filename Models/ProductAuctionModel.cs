@@ -13,11 +13,8 @@ namespace project.Models
         [ForeignKey("UserModelSeller")]
         public int? PersonModelSellerId { get; set; }
         public int? ProductModelId { get; set; }
-        public int Number { get; set; }
-        public int StartPrice { get; set; }
-        public int EndPrice { get; set; }
-        public bool isCredit { get; set; }
-        public string Comments { get; set; }
+        public int? EndPrice { get; set; }
+        public bool? isCredit { get; set; }
 
         public virtual UserModel UserModelBuyer { get; set; }
         public virtual AuctionModel AuctionModel { get; set; }

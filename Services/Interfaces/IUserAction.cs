@@ -1,5 +1,6 @@
 ﻿using project.DAL;
 using project.Models;
+using System.Collections.Generic;
 
 namespace project.Services.Interfaces
 {
@@ -9,5 +10,6 @@ namespace project.Services.Interfaces
         void Edit(AuctionContext context,string Login, UserModel model, string key);
         UserModel Get(AuctionContext context, string Login);
         UserModel Get(AuctionContext context, LoginModel model);
+        ICollection<UserModel> GetFriends(AuctionContext context, string Login);
     }
 }

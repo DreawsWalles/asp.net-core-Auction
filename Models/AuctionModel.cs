@@ -12,11 +12,15 @@ namespace project.Models
         public int? UserModelId { get; set; }
         public int? AdressModelId { get; set; }
         public DateTime dateTime { get; set; }
+        public string Name { get; set; }
+        public string Comments { get; set; }
+        public string Path { get; set; }
+        public bool isEnd { get; set; }
         
         public virtual TypeProductModel TypeProductModel { get; set; }
         public virtual UserModel UserModel { get; set; }
         public virtual AdressModel AdressModel { get; set; }
         public virtual ICollection<ProductAuctionModel> ProductAuctionModels { get; set; }
-        public virtual ICollection<BettingHistory> BettingHistories { get; set; }
+        public virtual ICollection<TenderModel> Tenders { get; set; }
     }
 }

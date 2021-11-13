@@ -29,7 +29,8 @@ namespace project.Services.Models
                 IsBuy = false,
                 Date = DateTime.Now,
                 UserModelId = user.Id,
-                TypeProductModelId = lot.type
+                TypeProductModelId = lot.type,
+                Price = lot.Price
             };
             FileHistoryModel fileHistory = fileService.Get(context, userService, Login);
             tmp.Path = fileHistory == null ? _products[lot.type] : fileHistory.Path;
@@ -51,6 +52,18 @@ namespace project.Services.Models
         }
 
         public ProductModel Get(AuctionContext context, int id) => context.Products.FirstOrDefault(x => x.Id == id);
+
+        public ICollection<ProductModel> GetCollection(AuctionContext context, IUserAction userService, string Login)
+        {
+            ICollection<ProductModel> result = new List<ProductModel>();
+            UserModel user = userService.Get(context, Login);
+            foreach (ProductModel element in context.Products)
+                if (element.UserModelId == user.Id)
+                    result.Add(element);
+            foreach (ProductModel element in result)
+                element.TypeProduct = context.TypeProducts.FirstOrDefault(x => x.Id == element.TypeProductModelId);
+            return result;
+        }
 
         public void Remove(AuctionContext context, int id)
         {

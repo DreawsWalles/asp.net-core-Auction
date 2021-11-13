@@ -1,0 +1,228 @@
+﻿@model ICollection<project.Models.AuctionModel>;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutMainPageLog.cshtml";
+}
+<style>
+    .header{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        width:85%;
+        margin:0 auto;
+    }
+    .header span{
+        font-family:'Century Gothic';
+        font-size:28px;
+        margin-top:0.4em;
+    }
+    .content hr{
+        width:85%;
+        margin-top:0em;
+    }
+    .main-content{
+        display:flex;
+        justify-content:center;
+        font-family:'Century Gothic';
+        font-size:22px;
+    }
+        .card{
+        padding-top:1em;
+        display:inline-block;
+        align-content:center;
+        font-family:'Century Gothic';
+        font-style:inherit;
+        margin-top:2em;
+    }
+    .card:hover{
+        box-shadow: 0 0 25px rgba(0,0,0,0.5);
+    }
+    .card a{
+        color:black;
+        display:block;
+        text-align: right;
+        font-size:24px;
+        margin-right:1em;
+    }
+    .card a:hover{
+        color:red;
+    }
+    .image{
+        width:12vw;
+        margin:0 auto;
+        margin-bottom:1em;
+    }
+    .card img{
+        display:block;
+        margin:0 auto;
+        height:18vh;
+        width:10vw;
+    }
+    .card button{
+        margin-top:0.7em;
+        width:12vw;
+        margin-left:1em;
+    }
+    .card:nth-child(2n){
+        margin-left:2vw;
+        margin-right:2vw;
+    }
+    .products{
+        margin:0 auto;
+    }
+
+
+.dropbtn-list {
+    background-color:white;
+    color:black;
+    border: none;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 25px;
+    letter-spacing: 0.1em;
+    margin:0 auto;
+}
+.dropdown-list 
+{
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content-list 
+{
+    display: none;
+    position: absolute;
+    min-width: 168px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    background-color:white;
+}
+
+    .dropdown-content-list a 
+    {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        font-family: 'Century Gothic';
+        font-size:18px;
+    }
+
+.dropdown-content-list a:hover {
+}
+
+.dropdown-list:hover .dropdown-content-list {
+    display: block;
+    background-color:white;
+}
+
+.dropdown-list:hover .dropbtn-list {
+    background-color:white;
+    color:black;
+}
+.list-group-item{
+    padding:0;
+}
+.list-group-item button{
+    margin-top:0;
+    text-align:left;
+}
+</style>
+<div class="content">
+    <div class="header">
+        <span>Аукционы</span>
+        <form method="get" asp-action="AddAuction" asp-controller="Auction">
+            <button type="submit" class="btn edit btn-outline-secondary">Добавить</button>
+        </form>
+    </div>
+    <hr />
+    <div class="main-content">
+        @{
+            if(Model == null)
+            {
+                <span class="span-center">Вы ещё не добавили ни одного аукциона</span>
+            }
+        }
+    </div>
+    <div class="row justify-content-center">
+    @{
+            if(Model != null)
+            {
+                foreach(project.Models.AuctionModel element in Model)
+                {
+                        <div class="card" style="width: 18rem;">
+                        <a asp-action="RemoveAuction" asp-controller="Auction" asp-route-id="@element.Id">✖</a>
+                          <img src="@element.Path" class="card-img-top" >
+                          <div class="card-body">
+                            <h5 class="card-title">@element.Name</h5>
+                            <p class="card-text">@element.Comments</p>
+                          </div>
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <div class="dropdown-list">
+                                      <button class="dropbtn-list btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Дата проведения
+                                      </button>
+                                    <div class="dropdown-content-list">
+                                        <div class="input-group mb-6">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroup-sizing-default">Дата</span>
+                                            </div>
+                                            <input readonly value="@element.dateTime.Day.@element.dateTime.Month.@element.dateTime.Year" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Страна">
+                                        </div>
+                                        <div class="input-group mb-6">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroup-sizing-default">Время</span>
+                                            </div>
+                                            <input readonly value="@element.dateTime.Hour:@element.dateTime.Minute" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Страна">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                             <li class="list-group-item">
+                                <div class="dropdown-list">
+                                      <button class="dropbtn-list btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Адрес
+                                      </button>
+                                    <div class="dropdown-content-list">
+                                        <div class="input-group mb-6">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroup-sizing-default">Страна</span>
+                                            </div>
+                                            <input readonly value="@element.AdressModel.Country" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Страна">
+                                        </div>
+                                        <div class="input-group mb-6">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroup-sizing-default">Город</span>
+                                            </div>
+                                            <input readonly value="@element.AdressModel.City" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Страна">
+                                        </div>
+                                        <div class="input-group mb-6">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroup-sizing-default">Улица</span>
+                                            </div>
+                                            <input readonly value="@element.AdressModel.Street" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Страна">
+                                        </div>
+                                        <div class="input-group mb-6">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroup-sizing-default">Почтовый индекс</span>
+                                            </div>
+                                            <input readonly value="@element.AdressModel.PostIndex" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Страна">
+                                        </div>
+                                    </div>
+                                </div>
+                             </li>
+                            <li class="list-group-item"> $</li>
+                          </ul>
+                          <div class="card-body">
+                            <form asp-action="EditLot" asp-controller="Lot" asp-route-id="@element.Id">
+                                <button type="submit" class="btn edit btn-info">Редактировать</button>
+                            </form>
+                          </div> 
+                        </div>
+                }
+
+            }
+        }
+</div>
+</div>

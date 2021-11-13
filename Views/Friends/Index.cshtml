@@ -1,0 +1,332 @@
+﻿@model ICollection<project.Models.UserModel>;
+@{
+    ViewData["Title"] = "Friends";
+    Layout = "~/Views/Shared/_LayoutMainPageLog.cshtml";
+}
+<style>
+.header span{
+    font-family:'Century Gothic';
+    font-size:28px;
+    margin-top:0.4em;
+}
+    hr{
+        margin-top:0em;
+        margin-bottom:2em;
+        margin-bottom:2em;
+    }
+.input-group{
+    width:58vw;
+}
+.content{
+    margin-top:3vh;
+}
+.main-content{
+    display:flex;
+    justify-content:center;
+}
+.main-content span{
+    display:block;
+    font-family:'Century Gothic';
+    font-size:20px;
+}
+.card img{
+    width:12vw;
+    margin: 0 auto;
+    margin-top:1em;
+}
+.card-dropbtn {
+    color: black;
+    font-family: 'ArchiveRegular';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 25px;
+    letter-spacing: 0.1em;
+}
+
+.card-dropbtn:hover{
+    background-color:white;
+    color:black;
+}
+.card-dropdown{
+    margin-top:4vh;
+    position: relative;
+    display: inline-block;
+}
+
+.card-dropdown-content 
+{
+    display: none;
+    position: absolute;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.card-dropdown-content a{
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    background-color:lightgray;
+    color: #696172;
+    font-family: 'Century Gothic';
+    font-size: 18px;
+}
+
+.card-dropdown-content a:hover {
+    background-color:gray;
+    color:white;
+}
+
+.card-dropdown:hover .card-dropdown-content {
+    display: block;
+}
+.btn-one{
+    margin-top:4vh;
+}
+.card:nth-child(2n){
+    margin-left:2vw;
+    margin-right:2vw;
+}
+.row{
+    font-family:'Century Gothic';
+}
+.header{
+    display:flex;
+    justify-content:space-between;
+     position: relative;
+}
+.header button{
+    border:none;
+    font-size:12px;
+    height:3em;
+    bottom:0;
+    bottom: 0;
+    position: absolute;
+    right:0;
+}
+.display-none{
+    display:none;
+}
+
+</style>
+
+<form asp-action="Search" asp-controller="Friends">
+<div class="input-group flex-nowrap">
+  <span class="input-group-text" id="addon-wrapping">🔍</span>
+  <input type="text" class="form-control" name="field" placeholder="Имя пользователя" aria-label="Username" aria-describedby="addon-wrapping">
+  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+</div>
+</form>
+
+<div class="content">
+    <div class="header">
+        <span>Подписчики</span>
+        <button id="btn-up-down-1" type="submit" class="btn edit btn-outline-secondary" onclick="upDown('subsribers', 'btn-up-down-1')">▲</button>
+    </div>
+        <hr />
+    <div id="subsribers" class="row display-none justify-content-center">
+        @{
+            foreach(project.Models.UserModel element in (List<project.Models.UserModel>)ViewData["Users"])
+            {
+                project.Models.FriendsModel friend = ((List<project.Models.FriendsModel>)ViewData["Friends"]).FirstOrDefault(x => x.FriendTwoId == element.Id && (x.status == 1 || x.status == 2));
+                if (friend != null)
+                {
+                      <div class="card mb-5" style="width: 18rem;">
+                        <img src="@element.FilePath" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
+                        <a asp-action="DeclineFrendship" asp-route-id="@element.Id" class="btn btn-one btn-danger mb-2">Отменить заявку</a>
+                      </div>
+                    </div>
+                    continue;
+                }
+                friend = ((List<project.Models.FriendsModel>)ViewData["Friends"]).FirstOrDefault(x => x.FriendOneId == element.Id && x.status == 1);
+                if(friend != null)
+                {
+                    <div class="card mb-5" style="width: 18rem;">
+                        <img src="@element.FilePath" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
+                        <a asp-action="DeclineFrendship" asp-route-id="@element.Id" class="btn btn-danger mb-2">Отклонить заявку</a>
+                        <a asp-action="AcceptFriendship" asp-route-id="@element.Id" class="btn btn-success mb-2">Принять заявку</a>
+                      </div>
+                    </div>
+                    continue;
+                }
+                friend = ((List<project.Models.FriendsModel>)ViewData["Friends"]).FirstOrDefault(x => x.FriendOneId == element.Id && x.status == 2);
+                if (friend != null)
+                {
+                    <div class="card mb-5" style="width: 18rem;">
+                        <img src="@element.FilePath" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
+                         <div class="card-dropdown">
+                            <button class="card-dropbtn btn btn-outline-secondary">Находится в подписчиках</button>
+                            <div class="card-dropdown-content">
+                                <a asp-action="AcceptFriendship" asp-route-id="@element.Id">Добавить в друзья</a>
+                            </div>
+                        </div>                         
+                      </div>
+                    </div> 
+                   continue;
+                }
+        }
+    }
+</div>
+<div class="header">
+        <span>Подписки</span>
+        <button id="btn-up-down-2" type="submit" class="btn edit btn-outline-secondary" onclick="upDown('follows', 'btn-up-down-2')">▲</button>
+    </div>
+        <hr />
+    <div id="follows" class="row display-none justify-content-center">
+        @{
+            foreach(project.Models.UserModel element in (List<project.Models.UserModel>)ViewData["Users"])
+            {
+                project.Models.FriendsModel friend = ((List<project.Models.FriendsModel>)ViewData["Friends"]).FirstOrDefault(x => x.FriendTwoId == element.Id && (x.status == 1 || x.status == 2));
+                if (friend != null)
+                {
+                      <div class="card mb-5" style="width: 18rem;">
+                        <img src="@element.FilePath" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
+                        <a asp-action="DeclineFrendship" asp-route-id="@element.Id" class="btn btn-one btn-danger mb-2">Отменить заявку</a>
+                      </div>
+                    </div>
+                    continue;
+                }
+                friend = ((List<project.Models.FriendsModel>)ViewData["Friends"]).FirstOrDefault(x => x.FriendOneId == element.Id && x.status == 1);
+                if(friend != null)
+                {
+                    <div class="card mb-5" style="width: 18rem;">
+                        <img src="@element.FilePath" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
+                        <a asp-action="DeclineFrendship" asp-route-id="@element.Id" class="btn btn-danger mb-2">Отклонить заявку</a>
+                        <a asp-action="AcceptFriendship" asp-route-id="@element.Id" class="btn btn-success mb-2">Принять заявку</a>
+                      </div>
+                    </div>
+                    continue;
+                }
+        }
+    }
+</div>
+    <div class="header">
+        <span>Друзья</span>
+    </div>
+        <hr />
+    @{
+        if(Model == null)
+        {
+        <div class="main-content">
+            <span>Вы не добавили ещё ни одного друга</span>
+            </div>
+        }
+        else
+        {
+            <div class="row justify-content-center">
+            @{
+            foreach(project.Models.UserModel element in Model)
+            {
+                <div class="card mb-5" style="width: 18rem;">
+                    <img src="@element.FilePath" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
+                        <a asp-action="RemoveFriendship" asp-route-id="@element.Id" class="btn btn-one btn-danger mb-2">Удалить из друзей</a>                       
+                    </div>
+                 </div>   
+            }
+            }
+            </div>
+        }
+    }
+    <div class="header">
+        <span>Все пользователи</span>
+    </div>
+        <hr />
+<div class="row justify-content-center">
+        @{
+            foreach(project.Models.UserModel element in (List<project.Models.UserModel>)ViewData["Users"])
+            {
+                project.Models.FriendsModel friend = ((List<project.Models.FriendsModel>)ViewData["Friends"]).FirstOrDefault(x => x.FriendTwoId == element.Id && (x.status == 1 || x.status == 2));
+                if (friend != null)
+                {
+                      <div class="card mb-5" style="width: 18rem;">
+                        <img src="@element.FilePath" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
+                        <a asp-action="DeclineFrendship" asp-route-id="@element.Id" class="btn btn-one btn-danger mb-2">Отменить заявку</a>
+                      </div>
+                    </div>
+                    continue;
+                }
+                friend = ((List<project.Models.FriendsModel>)ViewData["Friends"]).FirstOrDefault(x => x.FriendOneId == element.Id && x.status == 1);
+                if(friend != null)
+                {
+                    <div class="card mb-5" style="width: 18rem;">
+                        <img src="@element.FilePath" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
+                        <a asp-action="DeclineFrendship" asp-route-id="@element.Id" class="btn btn-danger mb-2">Отклонить заявку</a>
+                        <a asp-action="AcceptFriendship" asp-route-id="@element.Id" class="btn btn-success mb-2">Принять заявку</a>
+                      </div>
+                    </div>
+                    continue;
+                }
+                friend = ((List<project.Models.FriendsModel>)ViewData["Friends"]).FirstOrDefault(x => x.FriendOneId == element.Id && x.status == 2);
+                if (friend != null)
+                {
+                    <div class="card mb-5" style="width: 18rem;">
+                        <img src="@element.FilePath" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
+                         <div class="card-dropdown">
+                            <button class="card-dropbtn btn btn-outline-secondary">Находится в подписчиках</button>
+                            <div class="card-dropdown-content">
+                                <a asp-action="AcceptFriendship" asp-route-id="@element.Id">Добавить в друзья</a>
+                            </div>
+                        </div>                         
+                      </div>
+                    </div> 
+                   continue;
+                }
+                friend = ((List<project.Models.FriendsModel>)ViewData["Friends"]).FirstOrDefault(x => ((x.FriendTwoId == element.Id) || (x.FriendOneId == element.Id)) && x.status == 3);
+                if (friend != null)
+                {
+                    <div class="card mb-5" style="width: 18rem;">
+                        <img src="@element.FilePath" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
+                         <a asp-action="RemoveFriendship" asp-route-id="@element.Id" class="btn btn-one btn-danger mb-2">Удалить из друзей</a>                       
+                      </div>
+                    </div>   
+                    continue;
+                }
+                <div class="card mb-5" style="width: 18rem;">
+                        <img src="@element.FilePath" class="card-img-top" alt="...">
+                      <div class="card-body">
+                        <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
+                         <a asp-action="AddFriendship" asp-route-id="@element.Id" class="btn btn-one btn-success mb-2">Добавить в друзья</a>                       
+                      </div>
+                    </div>
+        }
+    }
+</div>
+</div>
+<script>
+    function upDown(id, btnId){
+        debugger
+        let btn = document.getElementById(btnId);
+        let el = document.getElementById(id);
+        if(btn.innerHTML == "▼")
+        {
+            el.classList.add("display-none");
+            btn.innerHTML = "▲"
+        }
+        else
+        {
+            el.classList.remove("display-none");
+            btn.innerHTML = "▼"
+        }
+    }
+</script>
