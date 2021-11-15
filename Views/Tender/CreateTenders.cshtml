@@ -1,0 +1,364 @@
+﻿@model List<project.Models.TenderModel>;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutMainPageLog.cshtml";
+}
+
+<style>
+    .name-page{
+        background-color: #7C45C5;
+        width:26vw;
+        padding-top:0.5em;
+        padding-bottom:0.5em;
+        position:fixed;
+        top:5.7vh;
+        left:0;
+        z-index:10000;
+    }
+    .name-page span{
+        display:block;
+        text-align:center;
+        font-family:Archive;
+        color:white;
+        font-size:1.75rem;
+    }
+    .header span{
+    font-family:'Century Gothic';
+    font-size:28px;
+    margin-top:0.4em;
+}
+    hr{
+        margin-top:0em;
+        margin-bottom:2em;
+    }
+    .content{
+        margin-top:13vh;
+    }
+    .header{
+    display:flex;
+    justify-content:space-between;
+     position: relative;
+}
+.header button{
+    border:none;
+    font-size:12px;
+    height:3em;
+    bottom: 0;
+    position: absolute;
+    right:0;
+}
+.name-tender{
+    display:flex;
+    font-family:'Century Gothic';
+}
+.name-tender span{
+    display:block;
+    position: absolute;
+    bottom: 0;
+    right:2em;
+}
+.name-tender input{
+    position:absolute;
+    bottom:0;
+    width:18vw;
+    right:2.6em;
+    border:0;
+}
+.name-tender .edit{
+    right:0;
+}
+.card img{
+    width:13vw;
+    margin:0 auto;  
+    height:15vw;
+}
+.last-hr{
+    margin-top:2em;
+}
+.hr-moderator{
+    margin-bottom:0.5em;
+}
+.span-moderator{
+    font-family:'Century Gothic';
+    margin:0 auto;
+    display:block;
+    text-align:center;
+}
+.nav-link{
+    color:black;
+}
+.nav-link:hover{
+    color:#7C45C5;
+}
+.active{
+    background-color:#7C45C5;
+    color:white;
+}
+.active:hover{
+    color:white;
+}
+.no-display{
+    display:none;
+}
+.check{
+    display:flex;
+    justify-content:end;
+    margin-right:1em;
+    margin-top:0.7em;
+}
+.btn-check{
+    transform:scale(1.3);
+}
+.card:nth-child(2n){
+    margin-left:2em;
+}
+    .choice{
+        box-shadow: 0 0 25px rgba(0,0,0,0.5);
+    }
+.span-choice-moderator span{ 
+    width:100%;
+    text-align:center;
+    display:block;
+}
+.save{
+    position:absolute;
+    width:40vw;
+    left:29vw;
+    font-family:'Century Gothic';
+}
+.error-block{
+    position:absolute;
+    left:0;
+    width:99vw;
+    color:white;
+    font-family:'Archive';
+    font-size:22px;
+    background-color:red;
+    z-index:1000;
+    border-radius:0.5em;
+    padding-top:0.5em;
+    padding-bottom:0.5em;
+    bottom:-100vh;
+}
+.error-block span{
+    display:block;
+    text-align:center;
+}
+</style>
+<div class="name-page">
+    <span>Редактирование тендеров</span>
+</div>
+<div class="content">
+    @{
+        foreach (project.Models.TenderModel element in @Model)
+        {
+            <div class="header">
+                <span>Тендер</span>
+                <form id="name-@element.Id" asp-action="EditName" asp-route-id="@element.Id">
+                <div class="name-tender">
+                    <input name="model" readonly type="text" class="form-control" value="@element.Name">
+                    <button type="button" class="btn edit btn-btn-outline-secondary" onclick="editName('name-@element.Id')">✎</button>
+                </div>
+                </form>
+            </div>
+            <hr />
+            <div class="row justify-content-around">
+                <div class="col-4">
+                  <div class="card" style="width: 18rem;">
+                      <img src="@element.Lot.ProductModel.Path" class="card-img-top">
+                      <div class="card-body">
+                        <h5 class="card-title">@element.Lot.ProductModel.Name</h5>
+                        <p class="card-text">@element.Lot.ProductModel.Comments</p>
+                      </div>
+                      <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Цена: @String.Format("{0:C}", @element.Lot.ProductModel.Price);</li>
+                      </ul>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="span-choice-moderator mb-3">
+                      <span class="input-group-text" id="basic-addon1">--Выберите модератора--</span>
+                    </div>
+                    <div id="choice-moderator-@element.Id">
+                         <nav class="nav">
+                          <button type="button" id="friend-link-@element.Id" class="nav-link active btn" aria-current="page" onclick="showContent('friend-link-@element.Id', 'choice-moderator-@element.Id')">Друзья</button>
+                          <button id="users-link-@element.Id" class="nav-link btn" onclick="showContent('users-link-@element.Id', 'choice-moderator-@element.Id')">Все пользователи</button>
+                        </nav>
+                        <hr class="hr-moderator"/>
+
+                        <form id="tender-@element.Id" method="post" class="moderators" asp-action="ChoiceModerator" asp-route-id="@element.Id">
+                            <div class="friends row justify-content-center">
+                            @{
+                                if ((List<project.Models.UserModel>)ViewData["Friend"] == null)
+                                {
+                                        <span class="span-moderator">Вы ещё не добавили ни одного друга</span>
+                                    }
+                                    else
+                                    {
+                                        foreach(project.Models.UserModel user in (List<project.Models.UserModel>)ViewData["Friend"])
+                                        {
+                                            if (element.ModeratorId == user.Id)
+                                            {
+                                                <div id="tender-@element.Id-user-@user.Id-friend" onclick="choiceProduct('tender-@element.Id', 'tender-@element.Id-user-@user.Id-friend')" class="card choice" style="width: 18rem;">
+                                                    <div class="check">
+                                                        <input value=@user.Id name="model" type="checkbox" class="btn-check" id="btn-check" autocomplete="on" checked>
+                                                    </div>
+                                                    <img src="@user.FilePath" class="card-img-top">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">@user.PersonModel.Name @user.PersonModel.Sername</h5>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div id="tender-@element.Id-user-@user.Id-friend" onclick="choiceProduct('tender-@element.Id', 'tender-@element.Id-user-@user.Id-friend')" class="card" style="width: 18rem;">
+                                                    <div class="check">
+                                                        <input value=@user.Id name="model" type="checkbox" class="btn-check" id="btn-check" autocomplete="on">
+                                                    </div>
+                                                    <img src="@user.FilePath" class="card-img-top">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">@user.PersonModel.Name @user.PersonModel.Sername</h5>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                }
+                             }
+                            </div>
+                             <div class="users no-display row justify-content-center">
+                                @{
+                                foreach(project.Models.UserModel user in (List<project.Models.UserModel>)ViewData["Users"])
+                                {
+                                    if (element.ModeratorId == user.Id)
+                                            {
+                                                <div id="tender-@element.Id-user-@user.Id-user" onclick="choiceProduct('tender-@element.Id', 'tender-@element.Id-user-@user.Id-user')" class="card choice" style="width: 18rem;">
+                                                    <div class="check">
+                                                        <input value=@user.Id name="model" type="checkbox" class="btn-check" id="btn-check" autocomplete="on" checked>
+                                                    </div>
+                                                    <img src="@user.FilePath" class="card-img-top">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">@user.PersonModel.Name @user.PersonModel.Sername</h5>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div id="tender-@element.Id-user-@user.Id-user" onclick="choiceProduct('tender-@element.Id', 'tender-@element.Id-user-@user.Id-user')" class="card" style="width: 18rem;">
+                                                    <div class="check">
+                                                        <input value=@user.Id name="model" type="checkbox" class="btn-check" id="btn-check" autocomplete="on">
+                                                    </div>
+                                                    <img src="@user.FilePath" class="card-img-top">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">@user.PersonModel.Name @user.PersonModel.Sername</h5>
+                                                    </div>
+                                                </div>
+                                            }
+                                }
+                                }
+                                </div>
+                            </form>
+                    </div>
+                </div>
+            </div>
+            <hr class="last-hr"/>
+        }
+     }
+          <div id="error" class="error-block no-display">
+        <span>Для продолжения вам необходимо выбрать модераторов для всех тендеров</span>
+     </div>
+     <form id="save" asp-action="Index" asp-controller="Auction">
+        <button type="button" class="save btn btn-success" onclick="check()">Сохранить изменения</button>
+     </form>
+
+</div>
+<script>
+    function SendError(){
+        debugger
+        let element = document.getElementById('error');
+        element.classList.remove('no-display');
+    }
+    function check(){
+        debugger
+        let forms = document.getElementsByClassName('moderators');
+        for(let i = 0; i < forms.length; i++)
+        {
+            let element = forms[i];
+            let check = false;
+            let j = 0;
+            while(!check && j < element.length)
+            {
+                check = element[j].checked;
+                j++;
+            }
+            if(!check){
+                SendError();
+                return;
+            }
+        }
+        let form = document.getElementById('save');
+        form.submit();
+    }
+    function editName(id){
+        debugger
+        let form = document.getElementById(id);
+        let input = form[0];
+        let btn = form[1];
+        if(btn.innerHTML == '✎')
+        {
+            input.removeAttribute('readonly');
+            btn.innerHTML = '✓';
+            btn.attributes[0].nodeValue = "button";
+        }
+        else
+        {
+            btn.innerHTML = '✎';
+            btn.attributes[0].nodeValue = "submit";
+        }
+    }
+    function showContent(linkId, moderatorId){
+        debugger
+        let btn = document.getElementById(linkId);
+        if(btn.classList.contains('active'))
+            return;
+        let mainContent = document.getElementById(moderatorId);
+        if(mainContent.children[0].children[0].id == linkId)
+        {
+            mainContent.children[0].children[1].classList.remove('active');
+            mainContent.children[0].children[0].classList.add('active');
+            mainContent.children[2].children[1].classList.add('no-display');
+            mainContent.children[2].children[0].classList.remove('no-display');
+        }
+        else
+        {
+            mainContent.children[0].children[0].classList.remove('active');
+            mainContent.children[0].children[1].classList.add('active');
+            mainContent.children[2].children[0].classList.add('no-display');
+            mainContent.children[2].children[1].classList.remove('no-display');
+        }
+    }
+    function choiceProduct(tenderId, userId){
+        debugger
+        let tender = document.getElementById(tenderId);
+        let user = document.getElementById(userId);
+        if(user.classList.contains('choice'))
+        {
+            let friends = tender.children[0].children;
+            let users = tender.children[1].children;
+            for(let i = 0; i < friends.length; i++)
+                friends[i].children[0].children[0].checked = false;
+            for(let i = 0; i < users.length; i++)
+                users[i].children[0].children[0].checked = false;
+        }
+        else
+        {
+            let friends = tender.children[0].children;
+            let users = tender.children[1].children;
+            for(let i = 0; i < friends.length; i++)
+                friends[i].children[0].children[0].checked = false;
+            for(let i = 0; i < users.length; i++)
+                users[i].children[0].children[0].checked = false;
+            user.children[0].children[0].checked = true;
+        }
+        tender.submit();
+    }
+</script>

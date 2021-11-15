@@ -16,7 +16,7 @@ namespace project.Models
         public string Comments { get; set; }
         public string Path { get; set; }
         public bool isEnd { get; set; }
-        
+
         public virtual TypeProductModel TypeProductModel { get; set; }
         public virtual UserModel UserModel { get; set; }
         public virtual AdressModel AdressModel { get; set; }

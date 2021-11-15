@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using project.Models.Product;
 using System.ComponentModel.DataAnnotations;
+using project.asp.net.core.Models.Messanger;
 
 namespace project.Models
 {
@@ -18,6 +19,7 @@ namespace project.Models
         public int? PersonModelId { get; set; }
         public string? FilePath { get; set; }
         public decimal? Money { get; set; }
+        public int? ReesterId { get; set; }
 
         public virtual PersonModel PersonModel { get; set; }
         public virtual ICollection<ProductModel> Products { get; set; }

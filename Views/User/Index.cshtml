@@ -67,25 +67,6 @@
     .Adress a:hover{
         color:purple;
     }
-    .menu{
-        display:inline-block;
-        position:fixed;
-        left:12.5em;
-        top:6.9em;
-    }
-    .menu a{
-        background-color:white;
-        color:black;
-        display:block;
-        font-size:20px;
-        padding-left:0.9em;
-        padding-right:0.9em;
-        font-family: 'Century Gothic';
-    }
-    .menu a:hover{
-        background: rgba(236, 217, 251, 0.89);
-        margin-left:0.5em;
-    }
     .spanTwo{
         display:flex;
     }
@@ -112,12 +93,73 @@
         text-align:right;
         margin-right:1em;
     }
+    .menu-dropdown{
+
+    }
+.menu-dropbtn {
+    position:fixed;
+    top:8vh;
+    left:0;
+    padding-left:0.7em;
+    color: #7C45C5;
+    border: solid 1px #7C45C5; 
+    font-family: 'ArchiveRegular';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 22px;
+    line-height: 25px;
+    letter-spacing: 0.1em;
+}
+.menu-dropdown{
+    position: relative;
+    display: inline-block;
+}
+
+.menu-dropdown-content 
+{
+    display: none;
+    position: fixed;
+    top:8vh;
+    left:3vw;
+    min-width: 168px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+    .menu-dropdown-content a 
+    {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        background: rgba(236, 217, 251, 0.89);
+        color: #696172;
+        font-family: 'Century Gothic';
+        font-size: 22px;
+    }
+
+.menu-dropdown-content a:hover {
+    background: rgba(236, 255, 251, 0.89);
+}
+
+.menu-dropdown:hover .menu-dropdown-content {
+
+    display: block;
+}
+
+.menu-dropdown:hover .menu-dropbtn {
+    background-color:#7C45C5;
+    color: white;
+}
 </style>
-<div class="menu">
-    <a href="#Account">Данныые пользователя</a>
-    <a href="#Adress">Адрес</a>
-    <a href="#BankDetails">Банковские реквизиты</a>
-    <a href="#CreditDetails">Банковская карта</a>
+ <div class="menu-dropdown">
+    <button class="menu-dropbtn btn">➤</button>
+    <div class="menu-dropdown-content">
+        <a href="#Account">Данныые пользователя</a>
+        <a href="#Adress">Адрес</a>
+        <a href="#BankDetails">Банковские реквизиты</a>
+        <a href="#CreditDetails">Банковская карта</a>
+    </div>
 </div>
 <div class="Money">
     <span>

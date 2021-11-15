@@ -8,9 +8,11 @@ namespace project.Models
         public int AuctionModelId { get; set; }
         public string Name { get; set; }
         public int? ModeratorId { get; set; }
+        public int? LotId { get; set; }
 
         public virtual AuctionModel AuctionModel { get; set; }
         public virtual UserModel Moderator { get; set; }
         public virtual ICollection<BettingHistory> BettingHistories { get; set; }
+        public virtual ProductAuctionModel Lot { get; set; }
     }
 }

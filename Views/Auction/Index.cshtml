@@ -168,13 +168,13 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="inputGroup-sizing-default">Дата</span>
                                             </div>
-                                            <input readonly value="@element.dateTime.Day.@element.dateTime.Month.@element.dateTime.Year" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Страна">
+                                            <input readonly value="@String.Format("{0:d}", @element.dateTime)" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Страна">
                                         </div>
                                         <div class="input-group mb-6">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="inputGroup-sizing-default">Время</span>
                                             </div>
-                                            <input readonly value="@element.dateTime.Hour:@element.dateTime.Minute" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Страна">
+                                            <input readonly value="@String.Format("{0:t}", @element.dateTime)" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Страна">
                                         </div>
                                     </div>
                                 </div>

@@ -89,7 +89,7 @@ namespace project.Controllers
                 auction.Path = fileHistory.Path;
             dataBase.Auctions.Add(auction);
             dataBase.SaveChanges();
-            int auctionId = dataBase.Auctions.FirstOrDefault(x => x.UserModelId == userService.Get(dataBase, User.Identity.Name).Id).Id;
+            int auctionId = dataBase.Auctions.Where(x => x.UserModelId == userService.Get(dataBase, User.Identity.Name).Id).ToList().Last().Id;
             ICollection<ProductModel> products = productService.GetCollection(dataBase, userService, User.Identity.Name);
             int i = 0;
             foreach(ProductModel element in products)
@@ -102,10 +102,17 @@ namespace project.Controllers
                         ProductModelId = element.Id,
                     };
                     dataBase.ProductAuctions.Add(tmp);
+                    TenderModel tender = new TenderModel()
+                    {
+                        AuctionModelId = auctionId,
+                        Name = "Продажа лота: " + '\"' + element.Name + " \"",
+                        Lot = tmp
+                    };
+                    dataBase.Tenders.Add(tender);
                     i++;
                 }   
             dataBase.SaveChanges();
-            return RedirectToAction("Index", "Tender");
+            return RedirectToAction("CreateTenders", "Tender");
         }
 
         [HttpPost]

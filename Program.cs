@@ -9,11 +9,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace project
 {
     public class Program
     {
+        private static void checkForTime_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            return;
+        }
         public static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
@@ -31,6 +36,11 @@ namespace project
                     logger.LogError(ex, "An error occurred seeding the DB.");
                 }
             }
+            double interval60Minutes = 60 * 60 * 1000 * 12; // каждые 12 часов обновляется
+
+            Timer checkForTime = new Timer(interval60Minutes);
+            checkForTime.Elapsed += new ElapsedEventHandler(checkForTime_Elapsed);
+            checkForTime.Enabled = true;
             host.Run();
         }
 
