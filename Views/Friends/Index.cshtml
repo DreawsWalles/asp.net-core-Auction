@@ -50,7 +50,7 @@
     color:black;
 }
 .card-dropdown{
-    margin-top:4vh;
+    margin-top:2.7vh;
     position: relative;
     display: inline-block;
 }
@@ -109,9 +109,36 @@
 .display-none{
     display:none;
 }
-
+    .name-page{
+        background-color: #7C45C5;
+        width:17.5vw;
+        padding-top:0.5em;
+        padding-bottom:0.5em;
+        position:fixed;
+        top:5.7vh;
+        left:0;
+        z-index:10000;
+    }
+    .name-page span{
+        display:block;
+        text-align:center;
+        font-family:Archive;
+        color:white;
+        font-size:1.75rem;
+    }
+    .btn-width{
+        display:block;
+        margin-left:auto;
+        margin-right:auto;
+        width:11.8vw;
+    }
+    .card-width{
+        margin-left:0.6em;
+    }
 </style>
-
+<div class="name-page">
+    <span>друзья</span>
+</div>
 <form asp-action="Search" asp-controller="Friends">
 <div class="input-group flex-nowrap">
   <span class="input-group-text" id="addon-wrapping">🔍</span>
@@ -133,11 +160,13 @@
                 project.Models.FriendsModel friend = ((List<project.Models.FriendsModel>)ViewData["Friends"]).FirstOrDefault(x => x.FriendTwoId == element.Id && (x.status == 1 || x.status == 2));
                 if (friend != null)
                 {
-                      <div class="card mb-5" style="width: 18rem;">
+                      <div class="card mb-5" style="width: 18rem;" ondblclick="showPage('subsriber-@element.Id')">
+                      <form id="subsriber-@element.Id" asp-action="ShowAccount" asp-controller="SinglePage" asp-route-id="@element.Id"></form>
                         <img src="@element.FilePath" class="card-img-top" alt="...">
                       <div class="card-body">
                         <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
-                        <a asp-action="DeclineFrendship" asp-route-id="@element.Id" class="btn btn-one btn-danger mb-2">Отменить заявку</a>
+                        <a asp-action="DeclineFrendship" asp-route-id="@element.Id" class="btn-width btn btn-one btn-danger mb-2">Отменить заявку</a>
+                        <a asp-action="Dialog" asp-controller="Messanger" asp-route-id="@element.Id" class="btn-width btn btn-outline-secondary mb-2">Отправить сообщение</a>
                       </div>
                     </div>
                     continue;
@@ -145,12 +174,14 @@
                 friend = ((List<project.Models.FriendsModel>)ViewData["Friends"]).FirstOrDefault(x => x.FriendOneId == element.Id && x.status == 1);
                 if(friend != null)
                 {
-                    <div class="card mb-5" style="width: 18rem;">
+                    <div class="card mb-5" style="width: 18rem;" ondblclick="showPage('subsriber-@element.Id')">
+                    <form id="subsriber-@element.Id" asp-action="ShowAccount" asp-controller="SinglePage" asp-route-id="@element.Id"></form>
                         <img src="@element.FilePath" class="card-img-top" alt="...">
                       <div class="card-body">
                         <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
-                        <a asp-action="DeclineFrendship" asp-route-id="@element.Id" class="btn btn-danger mb-2">Отклонить заявку</a>
-                        <a asp-action="AcceptFriendship" asp-route-id="@element.Id" class="btn btn-success mb-2">Принять заявку</a>
+                        <a asp-action="DeclineFrendship" asp-route-id="@element.Id" class="btn-width btn btn-danger mb-2">Отклонить заявку</a>
+                        <a asp-action="AcceptFriendship" asp-route-id="@element.Id" class="btn-width btn btn-success mb-2">Принять заявку</a>
+                        <a asp-action="Dialog" asp-controller="Messanger" asp-route-id="@element.Id" class="btn-width btn btn-outline-secondary mb-2">Отправить сообщение</a>
                       </div>
                     </div>
                     continue;
@@ -158,16 +189,18 @@
                 friend = ((List<project.Models.FriendsModel>)ViewData["Friends"]).FirstOrDefault(x => x.FriendOneId == element.Id && x.status == 2);
                 if (friend != null)
                 {
-                    <div class="card mb-5" style="width: 18rem;">
+                    <div class="card mb-5" style="width: 18rem;" ondblclick="showPage('subsriber-@element.Id')">
+                    <form id="subsriber-@element.Id" asp-action="ShowAccount" asp-controller="SinglePage" asp-route-id="@element.Id"></form>
                         <img src="@element.FilePath" class="card-img-top" alt="...">
                       <div class="card-body">
                         <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
-                         <div class="card-dropdown">
+                         <div class="card-width card-dropdown mb-2">
                             <button class="card-dropbtn btn btn-outline-secondary">Находится в подписчиках</button>
                             <div class="card-dropdown-content">
                                 <a asp-action="AcceptFriendship" asp-route-id="@element.Id">Добавить в друзья</a>
                             </div>
-                        </div>                         
+                        </div>  
+                        <a asp-action="Dialog" asp-controller="Messanger" asp-route-id="@element.Id" class="btn-width btn btn-outline-secondary mb-2">Отправить сообщение</a>
                       </div>
                     </div> 
                    continue;
@@ -187,11 +220,13 @@
                 project.Models.FriendsModel friend = ((List<project.Models.FriendsModel>)ViewData["Friends"]).FirstOrDefault(x => x.FriendTwoId == element.Id && (x.status == 1 || x.status == 2));
                 if (friend != null)
                 {
-                      <div class="card mb-5" style="width: 18rem;">
+                      <div class="card mb-5" style="width: 18rem;" ondblclick="showPage('follow-@element.Id')">
+                      <form id="follow-@element.Id" asp-action="ShowAccount" asp-controller="SinglePage" asp-route-id="@element.Id"></form>
                         <img src="@element.FilePath" class="card-img-top" alt="...">
                       <div class="card-body">
                         <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
-                        <a asp-action="DeclineFrendship" asp-route-id="@element.Id" class="btn btn-one btn-danger mb-2">Отменить заявку</a>
+                        <a asp-action="DeclineFrendship" asp-route-id="@element.Id" class="btn-width btn btn-one btn-danger mb-2">Отменить заявку</a>
+                        <a asp-action="Dialog" asp-controller="Messanger" asp-route-id="@element.Id" class="btn-width btn btn-outline-secondary mb-2">Отправить сообщение</a>
                       </div>
                     </div>
                     continue;
@@ -199,12 +234,14 @@
                 friend = ((List<project.Models.FriendsModel>)ViewData["Friends"]).FirstOrDefault(x => x.FriendOneId == element.Id && x.status == 1);
                 if(friend != null)
                 {
-                    <div class="card mb-5" style="width: 18rem;">
+                    <div class="card mb-5" style="width: 18rem;" ondblclick="showPage('follow-@element.Id')">
+                    <form id="follow-@element.Id" asp-action="ShowAccount" asp-controller="SinglePage" asp-route-id="@element.Id"></form>
                         <img src="@element.FilePath" class="card-img-top" alt="...">
                       <div class="card-body">
                         <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
-                        <a asp-action="DeclineFrendship" asp-route-id="@element.Id" class="btn btn-danger mb-2">Отклонить заявку</a>
-                        <a asp-action="AcceptFriendship" asp-route-id="@element.Id" class="btn btn-success mb-2">Принять заявку</a>
+                        <a asp-action="DeclineFrendship" asp-route-id="@element.Id" class="btn-width btn btn-danger mb-2">Отклонить заявку</a>
+                        <a asp-action="AcceptFriendship" asp-route-id="@element.Id" class="btn-width btn btn-success mb-2">Принять заявку</a>
+                        <a asp-action="Dialog" asp-controller="Messanger" asp-route-id="@element.Id" class="btn-width btn btn-outline-secondary mb-2">Отправить сообщение</a>
                       </div>
                     </div>
                     continue;
@@ -229,11 +266,13 @@
             @{
             foreach(project.Models.UserModel element in Model)
             {
-                <div class="card mb-5" style="width: 18rem;">
+                <div class="card mb-5" style="width: 18rem;" ondblclick="showPage('friend-@element.Id')">
+                <form id="friend-@element.Id" asp-action="ShowAccount" asp-controller="SinglePage" asp-route-id="@element.Id"></form>
                     <img src="@element.FilePath" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
-                        <a asp-action="RemoveFriendship" asp-route-id="@element.Id" class="btn btn-one btn-danger mb-2">Удалить из друзей</a>                       
+                        <a asp-action="RemoveFriendship" asp-route-id="@element.Id" class="btn-width btn btn-one btn-danger mb-2">Удалить из друзей</a>     
+                        <a asp-action="Dialog" asp-controller="Messanger" asp-route-id="@element.Id" class="btn-width btn btn-outline-secondary mb-2">Отправить сообщение</a>
                     </div>
                  </div>   
             }
@@ -252,11 +291,13 @@
                 project.Models.FriendsModel friend = ((List<project.Models.FriendsModel>)ViewData["Friends"]).FirstOrDefault(x => x.FriendTwoId == element.Id && (x.status == 1 || x.status == 2));
                 if (friend != null)
                 {
-                      <div class="card mb-5" style="width: 18rem;">
+                      <div class="card mb-5" style="width: 18rem;" ondblclick="showPage('all-@element.Id')">
+                      <form id="all-@element.Id" asp-action="ShowAccount" asp-controller="SinglePage" asp-route-id="@element.Id"></form>
                         <img src="@element.FilePath" class="card-img-top" alt="...">
                       <div class="card-body">
                         <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
-                        <a asp-action="DeclineFrendship" asp-route-id="@element.Id" class="btn btn-one btn-danger mb-2">Отменить заявку</a>
+                        <a asp-action="DeclineFrendship" asp-route-id="@element.Id" class="btn-width btn btn-one btn-danger mb-2">Отменить заявку</a>
+                        <a asp-action="Dialog" asp-controller="Messanger" asp-route-id="@element.Id" class="btn-width btn btn-outline-secondary mb-2">Отправить сообщение</a>
                       </div>
                     </div>
                     continue;
@@ -264,12 +305,14 @@
                 friend = ((List<project.Models.FriendsModel>)ViewData["Friends"]).FirstOrDefault(x => x.FriendOneId == element.Id && x.status == 1);
                 if(friend != null)
                 {
-                    <div class="card mb-5" style="width: 18rem;">
+                    <div class="card mb-5" style="width: 18rem;" ondblclick="showPage('all-@element.Id')">
+                    <form id="all-@element.Id" asp-action="ShowAccount" asp-controller="SinglePage" asp-route-id="@element.Id"></form>
                         <img src="@element.FilePath" class="card-img-top" alt="...">
                       <div class="card-body">
                         <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
-                        <a asp-action="DeclineFrendship" asp-route-id="@element.Id" class="btn btn-danger mb-2">Отклонить заявку</a>
-                        <a asp-action="AcceptFriendship" asp-route-id="@element.Id" class="btn btn-success mb-2">Принять заявку</a>
+                        <a asp-action="DeclineFrendship" asp-route-id="@element.Id" class="btn-width btn btn-danger mb-2">Отклонить заявку</a>
+                        <a asp-action="AcceptFriendship" asp-route-id="@element.Id" class="btn-width btn btn-success mb-2">Принять заявку</a>
+                        <a asp-action="Dialog" asp-controller="Messanger" asp-route-id="@element.Id" class="btn-width btn btn-outline-secondary mb-2">Отправить сообщение</a>
                       </div>
                     </div>
                     continue;
@@ -277,16 +320,18 @@
                 friend = ((List<project.Models.FriendsModel>)ViewData["Friends"]).FirstOrDefault(x => x.FriendOneId == element.Id && x.status == 2);
                 if (friend != null)
                 {
-                    <div class="card mb-5" style="width: 18rem;">
+                    <div class="card mb-5" style="width: 18rem;" ondblclick="showPage('all-@element.Id'">
+                    <form id="all-@element.Id" asp-action="ShowAccount" asp-controller="SinglePage" asp-route-id="@element.Id"></form>
                         <img src="@element.FilePath" class="card-img-top" alt="...">
                       <div class="card-body">
                         <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
-                         <div class="card-dropdown">
+                         <div class="card-width card-dropdown mb-2">
                             <button class="card-dropbtn btn btn-outline-secondary">Находится в подписчиках</button>
                             <div class="card-dropdown-content">
                                 <a asp-action="AcceptFriendship" asp-route-id="@element.Id">Добавить в друзья</a>
                             </div>
-                        </div>                         
+                        </div> 
+                        <a asp-action="Dialog" asp-controller="Messanger" asp-route-id="@element.Id" class="btn-width btn btn-outline-secondary mb-2">Отправить сообщение</a>
                       </div>
                     </div> 
                    continue;
@@ -294,27 +339,36 @@
                 friend = ((List<project.Models.FriendsModel>)ViewData["Friends"]).FirstOrDefault(x => ((x.FriendTwoId == element.Id) || (x.FriendOneId == element.Id)) && x.status == 3);
                 if (friend != null)
                 {
-                    <div class="card mb-5" style="width: 18rem;">
-                        <img src="@element.FilePath" class="card-img-top" alt="...">
+                    <div class="card mb-5" style="width: 18rem;" ondblclick="showPage('all-@element.Id')">
+                    <form id="all-@element.Id" asp-action="ShowAccount" asp-controller="SinglePage" asp-route-id="@element.Id"></form>
+                      <img src="@element.FilePath" class="card-img-top" alt="...">
                       <div class="card-body">
                         <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
-                         <a asp-action="RemoveFriendship" asp-route-id="@element.Id" class="btn btn-one btn-danger mb-2">Удалить из друзей</a>                       
+                         <a asp-action="RemoveFriendship" asp-route-id="@element.Id" class="btn-width btn btn-one btn-danger mb-2">Удалить из друзей</a>
+                         <a asp-action="Dialog" asp-controller="Messanger" asp-route-id="@element.Id" class="btn-width btn btn-outline-secondary mb-2">Отправить сообщение</a>
                       </div>
                     </div>   
                     continue;
                 }
-                <div class="card mb-5" style="width: 18rem;">
-                        <img src="@element.FilePath" class="card-img-top" alt="...">
-                      <div class="card-body">
+                <div class="card mb-5" style="width: 18rem;" ondblclick="showPage('all-@element.Id')">
+                <form id="all-@element.Id" asp-action="ShowAccount" asp-controller="SinglePage" asp-route-id="@element.Id"></form>
+                    <img src="@element.FilePath" class="card-img-top" alt="...">
+                    <div class="card-body">
                         <h5 class="card-title">@element.PersonModel.Name @element.PersonModel.Sername</h5>
-                         <a asp-action="AddFriendship" asp-route-id="@element.Id" class="btn btn-one btn-success mb-2">Добавить в друзья</a>                       
-                      </div>
+                         <a asp-action="AddFriendship" asp-route-id="@element.Id" class="btn-width btn btn-one btn-success mb-2">Добавить в друзья</a>   
+                         <a asp-action="Dialog" asp-controller="Messanger" asp-route-id="@element.Id" class="btn-width btn btn-outline-secondary mb-2">Отправить сообщение</a>
                     </div>
+                </div>
         }
     }
 </div>
 </div>
 <script>
+    function showPage(id){
+        debugger
+        let element = document.getElementById(id);
+        element.submit();
+    }
     function upDown(id, btnId){
         debugger
         let btn = document.getElementById(btnId);

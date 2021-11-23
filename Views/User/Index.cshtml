@@ -98,7 +98,7 @@
     }
 .menu-dropbtn {
     position:fixed;
-    top:8vh;
+    top:11.4vh;
     left:0;
     padding-left:0.7em;
     color: #7C45C5;
@@ -119,7 +119,7 @@
 {
     display: none;
     position: fixed;
-    top:8vh;
+    top:12vh;
     left:3vw;
     min-width: 168px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -151,7 +151,27 @@
     background-color:#7C45C5;
     color: white;
 }
+        .name-page{
+        background-color: #7C45C5;
+        width:26vw;
+        padding-top:0.5em;
+        padding-bottom:0.5em;
+        position:fixed;
+        top:5.7vh;
+        left:0;
+        z-index:10000;
+    }
+    .name-page span{
+        display:block;
+        text-align:center;
+        font-family:Archive;
+        color:white;
+        font-size:1.75rem;
+    }
 </style>
+<div class="name-page">
+    <span>Пользовательские данные</span>
+</div>
  <div class="menu-dropdown">
     <button class="menu-dropbtn btn">➤</button>
     <div class="menu-dropdown-content">
@@ -293,6 +313,8 @@
             element.childNodes[3].innerHTML = "✓"
             element.childNodes[1].removeAttribute("readonly");
             element.childNodes[1].classList.add("input-vis");
+            if(name == 'password')
+                 element.childNodes[1].defaultValue = "";
             return;
         }
         if(element.childNodes[3].innerHTML == "✓")

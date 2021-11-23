@@ -123,8 +123,27 @@
     .back a:hover{
         color:white;
     }
+            .name-page{
+        background-color: #7C45C5;
+        width:20vw;
+        padding-top:0.5em;
+        padding-bottom:0.5em;
+        position:fixed;
+        top:5.7vh;
+        left:0;
+        z-index:10000;
+    }
+    .name-page span{
+        display:block;
+        text-align:center;
+        font-family:Archive;
+        color:white;
+        font-size:1.75rem;
+    }
 </style>
-
+<div class="name-page">
+    <span>поиск друзей</span>
+</div>
 <div class="back">
     <a asp-action="Index" asp-controller="Friends">⮜</a>
 </div>

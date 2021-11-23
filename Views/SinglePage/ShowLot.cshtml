@@ -1,0 +1,107 @@
+﻿@model project.Models.Product.ProductModel;
+@{
+    ViewData["Title"] = "ShowLot";
+    Layout = "~/Views/Shared/_LayoutMainPageLog.cshtml";
+}
+<style>
+    .name-page{
+        background-color: #7C45C5;
+        width:21vw;
+        padding-top:0.5em;
+        padding-bottom:0.5em;
+        position:fixed;
+        top:5.7vh;
+        left:0;
+        z-index:10000;
+        text-transform:lowercase;   
+    }
+    .name-page span{
+        display:block;
+        text-align:center;
+        font-family:Archive;
+        color:white;
+        font-size:1.75rem;
+    }
+    .content{
+        margin-top:12vh;
+    }
+    .image img{
+        width:20vw;
+        height:35vh;
+    }
+    .content{
+        justify-content:space-between;
+    }
+    .input-group span{
+        font-size:22px;
+        font-family:'Century Gothic';
+    }
+    .title{
+        width:7vw;
+        text-align:left;
+    }
+    .name{
+        margin-left:0.3em;
+    }
+    .back a{
+        color:black;
+        background-color:#7C45C5;
+        position:fixed;
+        left:0;
+        top:40vh;
+        font-size:35px;
+        padding-left:0.2em;
+        padding-right:0.2em;
+        padding-top:0.4em;
+        padding-bottom:0.4em;
+    }
+    .back a:hover{
+        color:white;
+    }
+</style>
+
+<div class="back">
+    <a asp-action="Index" asp-controller="Lot">⮜</a>
+</div>
+<div class="name-page">
+    <span>@Model.Name</span>
+</div>
+<div class="content form-row">
+    <div class="image form-group col-md-5">
+        <img src="@Model.Path" />
+    </div>
+    <div class="form-group col-md-7">
+        <div class="input-group mb-3">
+            <span class="title">Название: </span>
+            <span class="name">@Model.Name</span>
+        </div>
+        <div class="input-group mb-3">
+            <span class="title">Описание: </span>
+            <span class="name">@Model.Comments</span>
+        </div>
+        <div class="input-group mb-3">
+            <span class="title">Владелец: </span>
+            <span class="name">@Model.User.PersonModel.Name @Model.User.PersonModel.Patronymic @Model.User.PersonModel.Sername</span>
+        </div>
+        <div class="input-group mb-3">
+            <span class="title">Добавлено: </span>
+            <span class="name">@String.Format("{0:D}", @Model.Date)</span>
+        </div>
+        <div class="input-group mb-3">
+            <span class="title">Цена: </span>
+            <span class="name">@Model.Price$</span>
+        </div>
+        <div class="input-group mb-3">
+            <span class="title">Состояние: </span>
+            @if (@Model.IsBuy)
+            {
+                <span class="name">Продано</span>
+            }
+            else
+            {
+                <span class="name">Не продано</span>
+            }
+        </div>
+    </div>
+    <a class="btn btn-success" asp-action="EditLot" asp-controller="Lot" asp-route-id="@Model.Id">Редактировать</a>
+</div>

@@ -35,6 +35,8 @@ namespace project.Controllers
         }
         private string[] ProcessField(string param)
         {
+            if (param == null)
+                return null;
             string tmp = param.TrimStart().TrimEnd();
             tmp = Regex.Replace(tmp, @"\s+", " ");
             string[] result = tmp.Split(' ');
@@ -47,7 +49,7 @@ namespace project.Controllers
         {
             string[] param = ProcessField(field);
             if (param == null)
-                return View(null);
+                return View(new List<UserModel>());
             int id = userService.Get(dataBase, User.Identity.Name).Id;
             ViewData["Friends"] = dataBase.Friends.Where(x => x.FriendOneId == id || x.FriendTwoId == id).ToList();
             List<UserModel> users = dataBase.Users.Where(x => x.Id != id).ToList();

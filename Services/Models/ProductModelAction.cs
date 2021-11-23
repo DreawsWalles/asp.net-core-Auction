@@ -5,6 +5,7 @@ using project.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using project.asp.net.core.Models;
 
 namespace project.Services.Models
 {
@@ -41,7 +42,7 @@ namespace project.Services.Models
         public void Edit(AuctionContext context, IFileHistoryAction fileService, IUserAction userService, string Login, LotModel lot)
         {
             UserModel user = userService.Get(context, Login);
-            ProductModel tmp = Get(context, lot.Id);
+            ProductModel tmp = Get(context, userService, Login, lot.Id);
             tmp.Name = lot.Name;
             tmp.Comments = lot.Comments;
             tmp.TypeProductModelId = lot.type;
@@ -51,7 +52,13 @@ namespace project.Services.Models
             context.SaveChanges();
         }
 
-        public ProductModel Get(AuctionContext context, int id) => context.Products.FirstOrDefault(x => x.Id == id);
+        public ProductModel Get(AuctionContext context, IUserAction userService, string Login, int id)
+        {
+            ProductModel result = context.Products.FirstOrDefault(x => x.Id == id);
+            result.TypeProduct = context.TypeProducts.FirstOrDefault(x => x.Id == result.TypeProductModelId);
+            result.User = userService.Get(context, Login);
+            return result;
+        }
 
         public ICollection<ProductModel> GetCollection(AuctionContext context, IUserAction userService, string Login)
         {

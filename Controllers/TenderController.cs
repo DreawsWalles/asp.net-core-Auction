@@ -28,7 +28,7 @@ namespace project.Controllers
             foreach (TenderModel tender in tenders)
             {
                 tender.Lot = dataBase.ProductAuctions.FirstOrDefault(x => x.Id == tender.LotId);
-                tender.Lot.ProductModel = productService.Get(dataBase,(int)tender.Lot.ProductModelId);
+                tender.Lot.ProductModel = productService.Get(dataBase, userService, User.Identity.Name, (int)tender.Lot.ProductModelId);
             }
             List<UserModel> friends = userService.GetFriends(dataBase, User.Identity.Name).ToList();
             foreach (UserModel element in friends)

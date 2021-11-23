@@ -1,4 +1,4 @@
-﻿namespace project.Models
+﻿namespace project.asp.net.core.Models
 {
     public class FileHistoryModel
     {

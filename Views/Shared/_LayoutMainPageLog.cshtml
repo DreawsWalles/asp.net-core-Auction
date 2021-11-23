@@ -42,7 +42,7 @@
             <div class="dropdown-content acc">
                 <a asp-action="Index" asp-controller="User">Мой профиль</a>
                 <a asp-action="Index" asp-controller="Friends">Друзья</a>
-                <a href="#">Диалоги</a>
+                <a asp-action="Dialog" asp-controller="Messanger">Диалоги</a>
                 <a asp-action="Lot" asp-controller="User">Мои лоты</a>
                 <a asp-action="Index" asp-controller="Auction">Мои аукционы</a>
                 <a href="#">Мои торги</a>
@@ -59,6 +59,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="_framework/blazor.server.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

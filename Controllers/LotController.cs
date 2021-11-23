@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using project.asp.net.core.Models;
 
 namespace project.Controllers
 {
@@ -70,7 +71,7 @@ namespace project.Controllers
             if (id == 0)
             {
                 FileHistoryModel file = fileService.Get(DataBase, userService, User.Identity.Name);
-                ProductModel product = productService.Get(DataBase, file.ModelId);
+                ProductModel product = productService.Get(DataBase, userService, User.Identity.Name, file.ModelId);
                 model = new LotModel()
                 {
                     Id = product.Id,
@@ -82,7 +83,7 @@ namespace project.Controllers
             }
             else
             {
-                ProductModel product = productService.Get(DataBase, id);
+                ProductModel product = productService.Get(DataBase, userService, User.Identity.Name, id);
                 model = new LotModel()
                 {
                     Id = product.Id,

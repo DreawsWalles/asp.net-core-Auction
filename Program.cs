@@ -1,17 +1,13 @@
+using System;
+using System.Timers;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using project.asp.net.core.DAL;
 using project.DAL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Timers;
 
-namespace project
+namespace project.asp.net.core
 {
     public class Program
     {
@@ -28,7 +24,8 @@ namespace project
 
                 try
                 {
-                    var contextOne = services.GetRequiredService<AuctionContext>();
+                    var context = services.GetRequiredService<AuctionContext>();
+                    SampleData.Initialize(context);
                 }
                 catch (Exception ex)
                 {
@@ -36,7 +33,7 @@ namespace project
                     logger.LogError(ex, "An error occurred seeding the DB.");
                 }
             }
-            double interval60Minutes = 60 * 60 * 1000 * 12; // каждые 12 часов обновляется
+            double interval60Minutes = 60 * 60 * 1000 * 12; // пїЅпїЅпїЅпїЅпїЅпїЅ 12 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
             Timer checkForTime = new Timer(interval60Minutes);
             checkForTime.Elapsed += new ElapsedEventHandler(checkForTime_Elapsed);

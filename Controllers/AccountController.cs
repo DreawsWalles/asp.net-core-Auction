@@ -28,19 +28,7 @@ namespace project.Controllers
             return View();
         }
 
-        int Hash(string word)
-        {
-            int asciisum = 0;
-            int tmp;
-            for (int i = 0; i < word.Length; i++)
-            {
-                asciisum *= 199;
-                tmp = word[i];
-                asciisum += Math.Abs(tmp);
-                asciisum %= 4049;
-            }
-            return asciisum % 10000;
-        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)

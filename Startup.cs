@@ -10,9 +10,8 @@ using project.DAL;
 using project.Services.Interfaces;
 using project.Services.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
+using project.asp.net.core.Hubs;
 
 namespace project
 {
@@ -39,13 +38,23 @@ namespace project
             services.AddTransient<ISenderDetailsAction, SenderDetailsAction>();
             services.AddTransient<IFileHistoryAction, FileHistoryAction>();
             services.AddTransient<IProductModelAction, ProductModelAction>();
-            
+
+            services.AddRazorPages();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => //CookieAuthenticationOptions
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                 });
+            services.AddSignalR();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.WithOrigins("https://localhost:44361/Messanger/Dialog")
+                        .AllowCredentials();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,13 +76,15 @@ namespace project
             app.UseRouting();
 
             app.UseAuthentication();   
-            app.UseAuthorization();    
+            app.UseAuthorization();
+            app.UseCors();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<ChatHub>("/Messanger/Dialog");
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}");
             });
         }
     }

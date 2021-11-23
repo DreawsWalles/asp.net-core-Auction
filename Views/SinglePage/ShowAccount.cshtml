@@ -1,0 +1,151 @@
+﻿@model project.Models.UserModel;
+@{
+    ViewData["Title"] = "ShowAccount";
+    Layout = "~/Views/Shared/_LayoutMainPageLog.cshtml";
+}
+<style>
+    .back a{
+        color:black;
+        background-color:#7C45C5;
+        position:fixed;
+        left:0;
+        top:40vh;
+        font-size:35px;
+        padding-left:0.2em;
+        padding-right:0.2em;
+        padding-top:0.4em;
+        padding-bottom:0.4em;
+    }
+    .back a:hover{
+        color:white;
+    }
+    .name-page{
+        background-color: #7C45C5;
+        width:21vw;
+        padding-top:0.5em;
+        padding-bottom:0.5em;
+        position:fixed;
+        top:5.7vh;
+        left:0;
+        z-index:10000;
+        text-transform:lowercase;   
+    }
+    .name-page span{
+        display:block;
+        text-align:center;
+        font-family:Archive;
+        color:white;
+        font-size:1.75rem;
+    }
+    .content{
+        margin-top:12vh;
+    }
+    .image img{
+        width:20vw;
+        height:35vh;
+    }
+    .content{
+        justify-content:space-between;
+    }
+    .input-group span{
+        font-size:22px;
+        font-family:'Century Gothic';
+    }
+    .card-dropbtn {
+    color: black;
+    font-family: 'ArchiveRegular';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 25px;
+    letter-spacing: 0.1em;
+}
+
+.card-dropbtn:hover{
+    background-color:white;
+    color:black;
+}
+.card-dropdown{
+    margin-top:4vh;
+    position: relative;
+    display: inline-block;
+}
+
+.card-dropdown-content 
+{
+    display: none;
+    position: absolute;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.card-dropdown-content a{
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    background-color:lightgray;
+    color: #696172;
+    font-family: 'Century Gothic';
+    font-size: 18px;
+}
+
+.card-dropdown-content a:hover {
+    background-color:gray;
+    color:white;
+}
+
+.card-dropdown:hover .card-dropdown-content {
+    display: block;
+}
+</style>
+<div class="back">
+    <a asp-action="Index" asp-controller="Friends">⮜</a>
+</div>
+<div class="name-page">
+    <span>@Model.PersonModel.Name @Model.PersonModel.Sername</span>
+</div>
+<div class="content form-row">
+    <div class="image form-group col-md-5">
+        <img src="@Model.FilePath" />
+    </div>
+    <div class="form-group col-md-7">
+        <div class="input-group mb-3">
+            <span style="font-size:26px;">@Model.PersonModel.Name @Model.PersonModel.Sername </span>
+        </div>
+        <div class="input-group mb-3">
+            <span>@Model.PersonModel.Email </span>
+        </div>
+        <div class="input-group mb-3">
+            <span>@String.Format("{0:+# (###) ###-##-##}", Convert.ToInt64(Model.PersonModel.Phone)) </span>
+        </div>
+        @{
+            if(((project.Models.FriendsModel)ViewBag.FriendShip) == null)
+            {
+                <a asp-action="AddFriendship" asp-route-id="@Model.Id" class="btn btn-one btn-success mb-2">Добавить в друзья</a>   
+            }
+            else if(((project.Models.FriendsModel)ViewBag.FriendShip).FriendTwoId == Model.Id && (((project.Models.FriendsModel)ViewBag.FriendShip).status == 1 || ((project.Models.FriendsModel)ViewBag.FriendShip).status == 2))
+            {
+                <a asp-action="DeclineFrendship" asp-route-id="@Model.Id" class="btn btn-one btn-danger mb-2">Отменить заявку</a>
+            }
+            else if(((project.Models.FriendsModel)ViewBag.FriendShip).FriendOneId == Model.Id && ((project.Models.FriendsModel)ViewBag.FriendShip).status == 1)
+            {
+                <a asp-action="DeclineFrendship" asp-route-id="@Model.Id" class="btn btn-danger mb-2">Отклонить заявку</a>
+                <a asp-action="AcceptFriendship" asp-route-id="@Model.Id" class="btn btn-success mb-2">Принять заявку</a>
+            }
+            else if(((project.Models.FriendsModel)ViewBag.FriendShip).FriendOneId == Model.Id && ((project.Models.FriendsModel)ViewBag.FriendShip).status == 2)
+            {
+                <div class="card-dropdown">
+                    <button class="card-dropbtn btn btn-outline-secondary">Находится в подписчиках</button>
+                    <div class="card-dropdown-content">
+                        <a asp-action="AcceptFriendship" asp-route-id="@Model.Id">Добавить в друзья</a>
+                    </div>
+                </div> 
+            }
+            else if(((((project.Models.FriendsModel)ViewBag.FriendShip).FriendTwoId == Model.Id) || (((project.Models.FriendsModel)ViewBag.FriendShip).FriendOneId == Model.Id)) && ((project.Models.FriendsModel)ViewBag.FriendShip).status == 3)
+            {
+                <a asp-action="RemoveFriendship" asp-route-id="@Model.Id" class="btn btn-one btn-danger mb-2">Удалить из друзей</a>
+            }
+            
+        }
+    </div>

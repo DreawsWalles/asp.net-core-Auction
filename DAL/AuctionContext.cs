@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using project.asp.net.core.Models.Messanger;
+using project.asp.net.core.Models;
 using project.Models;
 using project.Models.Adress;
 using project.Models.Person;
@@ -22,9 +22,7 @@ namespace project.DAL
         public DbSet<FileHistoryModel> FileHistory { get; set; }
         public DbSet<TenderModel> Tenders { get; set; }
         public DbSet<FriendsModel> Friends { get; set; }
-        public DbSet<ReesterModel> Reester { get; set; }
-        public DbSet<MessagesModel> Messages { get; set; }
-        public DbSet<MessageModel> content { get; set; }
+        public DbSet<MessageModel> Messages { get; set; }
 
         public AuctionContext(DbContextOptions<AuctionContext> options) : base(options)
         {

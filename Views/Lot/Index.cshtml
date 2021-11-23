@@ -1,4 +1,4 @@
-﻿@model ICollection<project.Models.Product.ProductModel>;
+﻿    @model ICollection<project.Models.Product.ProductModel>;
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LayoutMainPageLog.cshtml";
@@ -68,7 +68,27 @@
         margin-left:2vw;
         margin-right:2vw;
     }
+    .name-page{
+        background-color: #7C45C5;
+        width:20vw;
+        padding-top:0.5em;
+        padding-bottom:0.5em;
+        position:fixed;
+        top:5.7vh;
+        left:0;
+        z-index:10000;
+    }
+    .name-page span{
+        display:block;
+        text-align:center;
+        font-family:Archive;
+        color:white;
+        font-size:1.75rem;
+    }
 </style>
+<div class="name-page">
+    <span>лоты</span>
+</div>
 <div class="content">
     <div class="header">
         <span>Лоты</span>
@@ -91,7 +111,9 @@
             {
                 foreach(project.Models.Product.ProductModel element in Model)
                 {
-                        <div class="card" style="width: 18rem;">
+                        <div class="card" style="width: 18rem;" ondblclick="showPage(@element.Id)">
+                        <form asp-action="ShowLot" asp-controller="SinglePage" asp-route-id="@element.Id" id="@element.Id">
+                        </form>
                         <a asp-action="RemoveLot" asp-controller="Lot" asp-route-id="@element.Id">✖</a>
                           <img src="@element.Path" class="card-img-top" >
                           <div class="card-body">
@@ -123,4 +145,11 @@
         }
     </div>
 </div>
+<script>
+    function showPage(id){
+        debugger
+        let element = document.getElementById(id);
+        element.submit();
+    }
+</script>
 
